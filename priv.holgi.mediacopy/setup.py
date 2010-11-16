@@ -13,6 +13,7 @@ setup(name='priv.holgi.mediacopy',
       classifiers=[
         "Programming Language :: Python",
         ("Topic :: Software Development ::"
+         "Topic :: Multimedia ::"
          "Libraries :: Python Modules")
         ],
       keywords='pictures copy exif',
@@ -27,6 +28,11 @@ setup(name='priv.holgi.mediacopy',
       install_requires=[
           'setuptools',
           # -*- Extra requirements: -*-
+      ],
+      dependency_links = [
+        "http://sourceforge.net/projects/exif-py/files/"
+        "http://sourceforge.net/projects/exif-py/files/EXIF/1.0.8/EXIFpy_1.0.8.tar.gz/download",
+        "http://downloads.sourceforge.net/project/exif-py/EXIF/1.0.8/",
       ],
       test_suite='nose.collector',
       test_requires=['Nose'],
