@@ -12,14 +12,16 @@ def parse_options():
                       help="verbose logging")
     parser.add_option('-n', '--noaction', dest="noaction", action="store_true",
                       help="don't perform the action")
-    parser.add_option('-d', '--destination', dest="destination", type="string", default=destination, help="set destination (default: %s)" % destination)
+    parser.add_option('-d', '--destination', dest="destination", 
+                      type="string", default=destination, 
+                      help="set destination (default: %s)" % destination)
     options, args = parser.parse_args()
     return [parser, options, args]
 
 def validate_destination(dest):
     "Validate that the destination exists and is writable."
     if not(path.exists(dest) and path.isdir(dest) and 
-           access(dest, X_OK & W_OK)):
+           access(dest, W_OK | X_OK)):
         raise IOError("Destination %s doesn't exist or isn't writable" % dest)
     return True
 
