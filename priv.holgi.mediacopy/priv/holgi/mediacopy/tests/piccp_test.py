@@ -3,9 +3,13 @@ from stat import S_IWUSR, S_IXUSR
 from tempfile import mkstemp, mkdtemp, gettempdir
 from unittest import TestCase
 from nose.tools import raises
-from priv.holgi.mediacopy.piccp import validate_destination, copy_file
+from priv.holgi.mediacopy.filelib import validate_destination, copy_file
 
-class PiccpBase(TestCase):
+class MediacpTestBase(TestCase):
+    ''' class for providing base functionality required by Test classes 
+    Serves basically as some kind of a zope.testing layer, w/o the benefits
+    of a real layer.
+    '''
     def _setup_testdir(self):
         newdir=mkdtemp('','mct',gettempdir())
         self.destdir=newdir
@@ -15,7 +19,8 @@ class PiccpBase(TestCase):
             rmdir(self.destdir)
     
 
-class ValidateDestination_Test(PiccpBase):
+class ValidateDestination_Test(MediacpTestBase):
+    ''' Tests ensuring that we're handling a valid destination '''
     destdir = None
 
     @raises(IOError)
@@ -65,30 +70,31 @@ class ValidateDestination_Test(PiccpBase):
             return retval
 
             
-class CopyFile_Test(PiccpBase):
+class CopyFile_Test(MediacpTestBase):
+    ''' Tests related to copying a file '''
 
     def setUp(self):
         package_dir = path.dirname(__file__)
-        self.testpicname = 'CIMG2448.JPG'
-        self.testpicture = path.join(package_dir, self.testpicname)
+        self.testfilename = 'CIMG2448.JPG'
+        self.testfile = path.join(package_dir, self.testfilename)
         self._setup_testdir()
 
     def tearDown(self):
-        if path.exists(self._copiedpicpath):
-            remove(self._copiedpicpath)
+        if path.exists(self._copiedfilepath):
+            remove(self._copiedfilepath)
         self._teardown_testdir()
 
-    def testpic_accessible_test(self):
-        assert (self.testpicture and 
-                path.exists(self.testpicture) and 
-                access(self.testpicture, R_OK))
-
     @property
-    def _copiedpicpath(self):
-        return path.join(self.destdir, self.testpicname)
+    def _copiedfilepath(self):
+        return path.join(self.destdir, self.testfilename)
+
+    def testfile_accessible_test(self):
+        assert (self.testfile and 
+                path.exists(self.testfile) and 
+                access(self.testfile, R_OK))
 
     def copyfile_generates_newfile_test(self):
-        copy_file(self.testpicture, self.destdir)
-        assert (path.exists(self._copiedpicpath) and
-                access(self._copiedpicpath, R_OK))
+        copy_file(self.testfile, self.destdir)
+        assert (path.exists(self._copiedfilepath) and
+                access(self._copiedfilepath, R_OK))
                   
