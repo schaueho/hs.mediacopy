@@ -6,7 +6,7 @@ import shutil
 from stat import S_ISDIR, S_ISREG, ST_MODE
 from optparse import OptionParser
 
-_destination = os.path.join(os.getenv("HOME"), "Bilder", "new")
+_destination = os.path.join(os.getenv("HOME"), "Bilder", "Fotos")
 
 def parse_options():
     usage = "usage: %prog [options] souredir"
@@ -72,7 +72,7 @@ def main():
     if options.noaction:
         callback = visitfile
     else:
-        callback = parse_exif
+        callback = lambda f: copy_file(f, options.destination)
     walktree(args[0], callback)
 
 if __name__ == "__main__":

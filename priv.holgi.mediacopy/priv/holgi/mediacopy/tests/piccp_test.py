@@ -1,13 +1,23 @@
-from os import chmod, path, remove, rmdir, stat
+from os import access, chmod, path, remove, rmdir, stat, R_OK
 from stat import S_IWUSR, S_IXUSR
 from tempfile import mkstemp, mkdtemp, gettempdir
 from unittest import TestCase
 from nose.tools import raises
-from priv.holgi.mediacopy.piccp import validate_destination
+from priv.holgi.mediacopy.piccp import validate_destination, copy_file
 
-class ValidateDestination_Test(TestCase):
-    destdir = None
+class PiccpBase(TestCase):
+    def _setup_testdir(self):
+        newdir=mkdtemp('','mct',gettempdir())
+        self.destdir=newdir
+
+    def _teardown_testdir(self):
+        if self.destdir:
+            rmdir(self.destdir)
     
+
+class ValidateDestination_Test(PiccpBase):
+    destdir = None
+
     @raises(IOError)
     def inexistant_destination_raises_ioerror_test(self):
         dest = path.join("tmp","doesnotexist")
@@ -54,11 +64,31 @@ class ValidateDestination_Test(TestCase):
             self._teardown_testdir()
             return retval
 
-    def _setup_testdir(self):
-        newdir=mkdtemp('','mct',gettempdir())
-        self.destdir=newdir
-
-    def _teardown_testdir(self):
-        if self.destdir:
-            rmdir(self.destdir)
             
+class CopyFile_Test(PiccpBase):
+
+    def setUp(self):
+        package_dir = path.dirname(__file__)
+        self.testpicname = 'CIMG2448.JPG'
+        self.testpicture = path.join(package_dir, self.testpicname)
+        self._setup_testdir()
+
+    def tearDown(self):
+        if path.exists(self._copiedpicpath):
+            remove(self._copiedpicpath)
+        self._teardown_testdir()
+
+    def testpic_accessible_test(self):
+        assert (self.testpicture and 
+                path.exists(self.testpicture) and 
+                access(self.testpicture, R_OK))
+
+    @property
+    def _copiedpicpath(self):
+        return path.join(self.destdir, self.testpicname)
+
+    def copyfile_generates_newfile_test(self):
+        copy_file(self.testpicture, self.destdir)
+        assert (path.exists(self._copiedpicpath) and
+                access(self._copiedpicpath, R_OK))
+                  
