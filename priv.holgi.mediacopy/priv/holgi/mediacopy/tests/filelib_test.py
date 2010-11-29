@@ -82,9 +82,22 @@ class CopyFile_Test(MediacpTestBase):
 
     @istest
     def copyfile_generates_newfile(self):
-        copy_file(self.testfile, self.destdir)
+        retval = copy_file(self.testfile, self.destdir)
         assert (path.exists(self._copiedfilepath) and
                 access(self._copiedfilepath, R_OK))
+        eq_(retval, True)
+
+    @istest
+    def copyfile_doesnt_overwrite(self):
+        # we use an initial copy as test setup condition
+        copy_file(self.testfile, self.destdir)
+        eq_(copy_file(self.testfile, self.destdir), False)
+
+    @istest
+    def copyfile_overwrites_when_forced(self):
+        # we use an initial copy as test setup condition
+        copy_file(self.testfile, self.destdir)
+        eq_(copy_file(self.testfile, self.destdir, True), True)
                   
 class SimilarFile_Test(object):
     

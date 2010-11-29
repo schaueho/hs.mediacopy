@@ -1,6 +1,7 @@
 import os
 import shutil
 from stat import S_ISDIR, S_ISREG, ST_MODE
+from priv.holgi.mediacopy.utils import logger
 
 _EXTENSION_TABLE = {
     '.jpg' : '.jpg',
@@ -37,9 +38,20 @@ def print_filename(filename):
     ''' Just print out the name of the file we would visit '''
     print 'visiting: %s' % filename
 
+def target_exists(destination, filename):
+    return os.path.exists(os.path.join(destination, filename))
+
 def copy_file(filename, destination, overwrite=False):
-    ''' Copy file to destination '''
-    shutil.copy2(filename, destination)
+    ''' Copy file to destination 
+    Returns True on successful copying.'''
+    basename = os.path.basename(filename)
+    if target_exists(destination, basename) and overwrite is False:
+        logger.info("Not overwriting existing target file %s" % \
+                        os.path.join(destination, basename))
+        return False
+    else:
+        shutil.copy2(filename, destination)
+        return True
 
 def similar_filenames(filename1, filename2):
     ''' Check whether two file names are similar 
