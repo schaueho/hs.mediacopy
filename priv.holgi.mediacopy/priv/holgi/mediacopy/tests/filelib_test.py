@@ -1,7 +1,7 @@
 from os import access, chmod, path, remove, rmdir, stat, R_OK
 from stat import S_IWUSR, S_IXUSR
 from tempfile import mkstemp
-from nose.tools import raises
+from nose.tools import raises, istest
 from priv.holgi.mediacopy.filelib import validate_destination, copy_file
 from priv.holgi.mediacopy.tests.mediacp_base_test import MediacpTestBase
 
@@ -30,7 +30,8 @@ class ValidateDestination_Test(MediacpTestBase):
             assert False
 
     @raises(IOError)
-    def unwritable_destination_raises_ioerror_test(self):
+    @istest
+    def unwritable_destination_raises_ioerror(self):
         self._setup_testdir()
         chmod(self.destdir, stat(self.destdir).st_mode ^ S_IWUSR ^ S_IXUSR)
         try:
@@ -44,7 +45,8 @@ class ValidateDestination_Test(MediacpTestBase):
             self._teardown_testdir()
             assert False
 
-    def valid_destination_returns_true_test(self):
+    @istest
+    def valid_destination_returns_true(self):
         self._setup_testdir()
         try:
             retval = validate_destination(self.destdir)
@@ -71,12 +73,14 @@ class CopyFile_Test(MediacpTestBase):
     def _copiedfilepath(self):
         return path.join(self.destdir, self.testfilename)
 
-    def testfile_accessible_test(self):
+    @istest
+    def testfile_is_accessible(self):
         assert (self.testfile and 
                 path.exists(self.testfile) and 
                 access(self.testfile, R_OK))
 
-    def copyfile_generates_newfile_test(self):
+    @istest
+    def copyfile_generates_newfile(self):
         copy_file(self.testfile, self.destdir)
         assert (path.exists(self._copiedfilepath) and
                 access(self._copiedfilepath, R_OK))
