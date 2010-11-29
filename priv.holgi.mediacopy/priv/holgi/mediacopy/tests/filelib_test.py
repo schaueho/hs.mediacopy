@@ -1,8 +1,9 @@
 from os import access, chmod, path, remove, rmdir, stat, R_OK
 from stat import S_IWUSR, S_IXUSR
 from tempfile import mkstemp
-from nose.tools import raises, istest
-from priv.holgi.mediacopy.filelib import validate_destination, copy_file
+from nose.tools import raises, istest, eq_
+from priv.holgi.mediacopy.filelib import validate_destination, \
+    copy_file, similar_filenames
 from priv.holgi.mediacopy.tests.mediacp_base_test import MediacpTestBase
 
 class ValidateDestination_Test(MediacpTestBase):
@@ -85,3 +86,13 @@ class CopyFile_Test(MediacpTestBase):
         assert (path.exists(self._copiedfilepath) and
                 access(self._copiedfilepath, R_OK))
                   
+class SimilarFile_Test(object):
+    
+    def case_doesnt_matter_test(self):
+        eq_(similar_filenames('CIMG2448.JPG', 'cimg2448.jpg'), True)
+
+    def similar_extensions_test(self):
+        eq_(similar_filenames('CIMG2448.JPG', 'CIMG2448.JPEG'), True)
+
+    def case_and_similar_extensions_test(self):
+        eq_(similar_filenames('CIMG2448.JPG', 'cimg2448.jpeg'), True)
