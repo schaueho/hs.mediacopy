@@ -95,12 +95,6 @@ class CopyFile_Test(MediacpTestBase):
         eq_(copy_file(self.testfile, self.destdir, overwrite=True), True)
 
     @istest
-    def copy_newfile_doesntcopy_unknownfiles(self):
-        # we try to copy ourself!
-        assert not(is_knownfiletype(__file__))
-        eq_(copy_newfile(__file__, self.destdir), False)
-
-    @istest
     def copy_newfile_doesnt_overwrite_similarfiles(self):
         # we use an initial copy as test setup condition
         copy_file(self.testfile, self.destdir)
@@ -111,6 +105,12 @@ class CopyFile_Test(MediacpTestBase):
         # we use an initial copy as test setup condition
         copy_file(self.testfile, self.destdir)
         eq_(copy_newfile(self.testfile, self.destdir, overwrite=True), True)
+
+    @istest
+    def copy_newfile_doesntcopy_unknownfiles(self):
+        # we try to copy ourself!
+        assert not(is_knownfiletype(__file__))
+        eq_(copy_newfile(__file__, self.destdir), False)
 
     @istest
     def copy_newfile_doesntcopy_unknownfiles_unless_forced(self):
