@@ -27,3 +27,7 @@ class MediacpTestBase(TestCase):
         ''' Remove a possible copy of the test picture '''
         if path.exists(self._copiedfilepath):
             remove(self._copiedfilepath)
+
+    @property
+    def _copiedfilepath(self):
+        return path.join(self.destdir, self.testfilename)

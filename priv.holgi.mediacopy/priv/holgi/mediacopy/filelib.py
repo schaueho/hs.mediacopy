@@ -10,6 +10,81 @@ _EXTENSION_TABLE = {
     '.mpeg': '.mpeg',
     }
 
+
+def copy_newfiles(filename, destination, overwrite=False):
+    ''' Copy file to destination only if we think it's new
+    Returns True on successful copying'''
+    basename = os.path.basename(filename)
+    similars = find_similar_filenames(destination, basename)
+    if similars and overwrite is False:
+        logger.info("Similar match found, won't copy %s" % \
+                        os.path.join(destination, basename))
+        return False
+    else:
+        copy_file(filename, destination, overwrite)
+
+def copy_file(filename, destination, overwrite=False):
+    ''' Copy file to destination 
+    Returns True on successful copying.'''
+    basename = os.path.basename(filename)
+    if target_exists(destination, basename) and overwrite is False:
+        logger.info("Not overwriting existing target file %s" % \
+                        os.path.join(destination, basename))
+        return False
+    else:
+        shutil.copy2(filename, destination)
+        return True
+
+def find_similar_filenames(destination, filename):
+    ''' Try to determine if we copied filename to destination before
+    '''
+    match = []
+    existing_targets = get_existing_targets(destination)
+    for existing_file in existing_targets.keys():
+        if similar_filenames(filename, existing_file):
+            match.append(existing_targets[filename])
+            break
+    return match
+
+def get_existing_targets(destination):
+    ''' Find all existing targets in destination '''
+    result = {}
+    def collect_filename(filename):
+        ''' Simple helper to collect filenames into result ''' 
+        result[os.path.basename(filename)]=filename
+
+    walktree(destination, lambda f: collect_filename(f))
+    return result
+
+def similar_filenames(filename1, filename2):
+    ''' Check whether two file names are similar 
+    Assumes that filenames are reduced to their basenames already.
+    '''
+    cname1 = reduce_filename(filename1)
+    cname2 = reduce_filename(filename2)
+    if cname1 == cname2:
+        return True
+    else:
+        return False
+
+def reduce_fileext(filename):
+    ''' Determine file extension from filename and reduce it
+    to a known canonical form'''
+    (base, ext) = os.path.splitext(filename)
+    ext = _EXTENSION_TABLE.get(ext, ext)
+    return base + ext
+
+def reduce_filename(filename):
+    ''' Reduce filename to an internal canonical representation
+    A canonical representation is a (unicode) string, consisting
+    solely of downcased letters (insofar possible). We also reduce
+    filename extensions to canonical versions using a lookup table.'''
+    return reduce_fileext(filename.lower())
+
+def target_exists(destination, filename):
+    ''' Determine whether filename exists at destination '''
+    return os.path.exists(os.path.join(destination, filename))
+  
 def validate_destination(dest):
     ''' Validate that the destination exists and is writable. '''
     if not(os.path.exists(dest) and os.path.isdir(dest) and 
@@ -37,44 +112,3 @@ def walktree(top, callback):
 def print_filename(filename):
     ''' Just print out the name of the file we would visit '''
     print 'visiting: %s' % filename
-
-def target_exists(destination, filename):
-    return os.path.exists(os.path.join(destination, filename))
-
-def copy_file(filename, destination, overwrite=False):
-    ''' Copy file to destination 
-    Returns True on successful copying.'''
-    basename = os.path.basename(filename)
-    if target_exists(destination, basename) and overwrite is False:
-        logger.info("Not overwriting existing target file %s" % \
-                        os.path.join(destination, basename))
-        return False
-    else:
-        shutil.copy2(filename, destination)
-        return True
-
-def similar_filenames(filename1, filename2):
-    ''' Check whether two file names are similar 
-    Assumes that filenames are reduced to their basenames already.
-    '''
-    cname1 = reduce_filename(filename1)
-    cname2 = reduce_filename(filename2)
-    if cname1 == cname2:
-        return True
-    else:
-        return False
-
-def reduce_fileext(filename):
-    ''' Determine file extension from filename and reduce it
-    to a known canonical form'''
-    (base, ext) = os.path.splitext(filename)
-    ext = _EXTENSION_TABLE.get(ext, ext)
-    return base + ext
-
-def reduce_filename(filename):
-    ''' Reduce filename to an internal canonical representation
-    A canonical representation is a (unicode) string, consisting
-    solely of downcased letters (insofar possible). We also reduce
-    filename extensions to canonical versions using a lookup table.'''
-    return reduce_fileext(filename.lower())
-  

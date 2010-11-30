@@ -3,7 +3,7 @@ from stat import S_IWUSR, S_IXUSR
 from tempfile import mkstemp
 from nose.tools import raises, istest, eq_
 from priv.holgi.mediacopy.filelib import validate_destination, \
-    copy_file, similar_filenames
+    copy_file, similar_filenames, find_similar_filenames
 from priv.holgi.mediacopy.tests.mediacp_base_test import MediacpTestBase
 
 class ValidateDestination_Test(MediacpTestBase):
@@ -70,10 +70,6 @@ class CopyFile_Test(MediacpTestBase):
         self._teardown_testpic()
         self._teardown_testdir()
 
-    @property
-    def _copiedfilepath(self):
-        return path.join(self.destdir, self.testfilename)
-
     @istest
     def testfile_is_accessible(self):
         assert (self.testfile and 
@@ -98,8 +94,16 @@ class CopyFile_Test(MediacpTestBase):
         # we use an initial copy as test setup condition
         copy_file(self.testfile, self.destdir)
         eq_(copy_file(self.testfile, self.destdir, True), True)
-                  
-class SimilarFile_Test(object):
+
+class SimilarFile_Test(MediacpTestBase):
+
+    def _setup_manually(self):
+        self._setup_testdir()
+        self._setup_testpic()
+
+    def _teardown_manually(self):
+        self._teardown_testpic()
+        self._teardown_testdir()
     
     def case_doesnt_matter_test(self):
         eq_(similar_filenames('CIMG2448.JPG', 'cimg2448.jpg'), True)
@@ -109,3 +113,17 @@ class SimilarFile_Test(object):
 
     def case_and_similar_extensions_test(self):
         eq_(similar_filenames('CIMG2448.JPG', 'cimg2448.jpeg'), True)
+
+    @istest
+    def find_similar_filenames_finds_matches_in_directories(self):
+        self._setup_manually()
+        copy_file(self.testfile, self.destdir)
+        try:
+            eq_(find_similar_filenames(self.destdir, self.testfilename), 
+                [path.join(self.destdir, self.testfilename)])
+        except AssertionError, e:
+            self._teardown_manually()
+            raise e
+        else:
+            self._teardown_manually()
+            return True
