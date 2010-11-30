@@ -11,28 +11,31 @@ _EXTENSION_TABLE = {
     }
 
 
-def copy_newfiles(filename, destination, overwrite=False):
+def copy_newfile(filename, destination, overwrite=False, noaction=False):
     ''' Copy file to destination only if we think it's new
     Returns True on successful copying'''
     basename = os.path.basename(filename)
     similars = find_similar_filenames(destination, basename)
-    if similars and overwrite is False:
+    if similars and not(overwrite):
         logger.info("Similar match found, won't copy %s" % \
                         os.path.join(destination, basename))
         return False
     else:
-        copy_file(filename, destination, overwrite)
+        copy_file(filename, destination, overwrite, noaction)
 
-def copy_file(filename, destination, overwrite=False):
+def copy_file(filename, destination, overwrite=False, noaction=False):
     ''' Copy file to destination 
     Returns True on successful copying.'''
     basename = os.path.basename(filename)
-    if target_exists(destination, basename) and overwrite is False:
+    if target_exists(destination, basename) and not(overwrite):
         logger.info("Not overwriting existing target file %s" % \
                         os.path.join(destination, basename))
         return False
     else:
-        shutil.copy2(filename, destination)
+        if noaction:
+            print "Copy %s to %s" % (filename, destination)
+        else:
+            shutil.copy2(filename, destination)
         return True
 
 def find_similar_filenames(destination, filename):

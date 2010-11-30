@@ -3,7 +3,7 @@
 import os
 from optparse import OptionParser
 from priv.holgi.mediacopy.filelib import validate_destination, \
-    copy_file, walktree, print_filename
+    copy_newfile, walktree, print_filename
 
 _destination = os.path.join(os.getenv("HOME"), "Bilder", "Fotos")
 
@@ -32,10 +32,8 @@ def main():
     except IOError, e:
         parser.print_help()
         raise e
-    if options.noaction:
-        callback = print_filename
-    else:
-        callback = lambda f: copy_file(f, options.destination, options.force)
+    callback = lambda f: copy_newfile(f, options.destination, 
+                                      options.force, options.noaction)
     walktree(args[0], callback)
 
 if __name__ == "__main__":
