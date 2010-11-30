@@ -50,14 +50,12 @@ class ValidateDestination_Test(MediacpTestBase):
     @istest
     def valid_destination_returns_true(self):
         self._setup_testdir()
+        retval = None
         try:
             retval = validate_destination(self.destdir)
-        except:
+        finally:
             self._teardown_testdir()
-            assert False
-        else:
-            self._teardown_testdir()
-            return retval
+        return retval
 
             
 class CopyFile_Test(MediacpTestBase):
@@ -85,12 +83,6 @@ class CopyFile_Test(MediacpTestBase):
         eq_(retval, True)
 
     @istest
-    def copy_file_doesntcopy_unknownfiles(self):
-        # we try to copy ourself!
-        assert not(is_knownfiletype(__file__))
-        eq_(copy_file(__file__, self.destdir), False)
-        
-    @istest
     def copyfile_doesnt_overwrite(self):
         # we use an initial copy as test setup condition
         copy_file(self.testfile, self.destdir)
@@ -102,6 +94,11 @@ class CopyFile_Test(MediacpTestBase):
         copy_file(self.testfile, self.destdir)
         eq_(copy_file(self.testfile, self.destdir, overwrite=True), True)
 
+    @istest
+    def copy_newfile_doesntcopy_unknownfiles(self):
+        # we try to copy ourself!
+        assert not(is_knownfiletype(__file__))
+        eq_(copy_newfile(__file__, self.destdir), False)
 
     @istest
     def copy_newfile_doesnt_overwrite_similarfiles(self):
@@ -115,6 +112,17 @@ class CopyFile_Test(MediacpTestBase):
         copy_file(self.testfile, self.destdir)
         eq_(copy_newfile(self.testfile, self.destdir, overwrite=True), True)
 
+    @istest
+    def copy_newfile_doesntcopy_unknownfiles_unless_forced(self):
+        # we try to copy ourself!
+        result = False
+        assert not(is_knownfiletype(__file__))
+        try:
+            eq_(copy_newfile(__file__, self.destdir, copyunknown=True), True)
+            result = True
+        finally:
+            remove(path.join(self.destdir, path.basename(__file__)))
+        return result
         
 
 class SimilarFile_Test(MediacpTestBase):

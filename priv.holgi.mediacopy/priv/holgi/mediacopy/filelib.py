@@ -19,6 +19,9 @@ def copy_newfile(filename, destination, copyunknown=False,
     Returns True on successful copying
     '''
     basename = os.path.basename(filename)
+    if not(is_knownfiletype(filename)) and not(copyunknown):
+        logger.info("Unknown file type, ignoring %s" % filename)
+        return False
     similars = find_similar_filenames(destination, basename)
     if similars and not(overwrite):
         logger.info("Similar match found, won't copy %s" % \
@@ -33,9 +36,6 @@ def copy_file(filename, destination, copyunknown=False,
     Returns True on successful copying.
     '''
     basename = os.path.basename(filename)
-    if not(is_knownfiletype(filename)) and not(copyunknown):
-        logger.info("Unknown file type, ignoring %s" % filename)
-        return False
     if target_exists(destination, basename) and not(overwrite):
         logger.info("Not overwriting existing target file %s" % \
                         os.path.join(destination, basename))
