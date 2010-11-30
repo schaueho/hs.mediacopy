@@ -16,6 +16,9 @@ def parse_options():
                       help="force overwrite")
     parser.add_option('-n', '--noaction', dest="noaction", action="store_true",
                       help="don't perform the action")
+    parser.add_option('-u', '--unknown', dest="copyunknown", 
+                      action="store_true",
+                      help="copy unknown filetypes as well")
     parser.add_option('-d', '--destination', dest="destination", 
                       type="string", default=_destination, 
                       help="set destination (default: %s)" % _destination)
@@ -33,6 +36,7 @@ def main():
         parser.print_help()
         raise e
     callback = lambda f: copy_newfile(f, options.destination, 
+                                      options.copyunknown,
                                       options.force, options.noaction)
     walktree(args[0], callback)
 

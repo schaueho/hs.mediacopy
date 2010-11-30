@@ -1,19 +1,23 @@
 import os
 import shutil
+import magic
 from stat import S_ISDIR, S_ISREG, ST_MODE
 from priv.holgi.mediacopy.utils import logger
 
 _EXTENSION_TABLE = {
     '.jpg' : '.jpg',
     '.jpeg': '.jpg',
-    '.mpg' : '.mpeg',
-    '.mpeg': '.mpeg',
     }
 
+_KNOWN_FILETYPES = [
+    'image/jpeg',
+    ]
 
-def copy_newfile(filename, destination, overwrite=False, noaction=False):
+def copy_newfile(filename, destination, copyunknown=False, 
+                 overwrite=False, noaction=False):
     ''' Copy file to destination only if we think it's new
-    Returns True on successful copying'''
+    Returns True on successful copying
+    '''
     basename = os.path.basename(filename)
     similars = find_similar_filenames(destination, basename)
     if similars and not(overwrite):
@@ -21,12 +25,17 @@ def copy_newfile(filename, destination, overwrite=False, noaction=False):
                         os.path.join(destination, basename))
         return False
     else:
-        copy_file(filename, destination, overwrite, noaction)
+        return copy_file(filename, destination, copyunknown, overwrite, noaction)
 
-def copy_file(filename, destination, overwrite=False, noaction=False):
+def copy_file(filename, destination, copyunknown=False, 
+              overwrite=False, noaction=False):
     ''' Copy file to destination 
-    Returns True on successful copying.'''
+    Returns True on successful copying.
+    '''
     basename = os.path.basename(filename)
+    if not(is_knownfiletype(filename)) and not(copyunknown):
+        logger.info("Unknown file type, ignoring %s" % filename)
+        return False
     if target_exists(destination, basename) and not(overwrite):
         logger.info("Not overwriting existing target file %s" % \
                         os.path.join(destination, basename))
@@ -72,7 +81,8 @@ def similar_filenames(filename1, filename2):
 
 def reduce_fileext(filename):
     ''' Determine file extension from filename and reduce it
-    to a known canonical form'''
+    to a known canonical form
+    '''
     (base, ext) = os.path.splitext(filename)
     ext = _EXTENSION_TABLE.get(ext, ext)
     return base + ext
@@ -81,7 +91,8 @@ def reduce_filename(filename):
     ''' Reduce filename to an internal canonical representation
     A canonical representation is a (unicode) string, consisting
     solely of downcased letters (insofar possible). We also reduce
-    filename extensions to canonical versions using a lookup table.'''
+    filename extensions to canonical versions using a lookup table.
+    '''
     return reduce_fileext(filename.lower())
 
 def target_exists(destination, filename):
@@ -94,6 +105,16 @@ def validate_destination(dest):
            os.access(dest, os.W_OK | os.X_OK)):
         raise IOError("Destination %s doesn't exist or isn't writable" % dest)
     return True
+
+def is_knownfiletype(filename):
+    ''' Determine if we know how to handle a given file '''
+    if get_mimetype(filename) in _KNOWN_FILETYPES:
+        return True
+
+def get_mimetype(filename):
+    ''' Determine the (mime) type of a given file '''
+    mime = magic.Magic(mime=True)
+    return mime.from_file(filename)
 
 def walktree(top, callback):
     ''' recursively descend the directory tree rooted at top,

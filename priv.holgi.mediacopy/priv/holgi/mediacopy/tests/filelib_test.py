@@ -3,7 +3,8 @@ from stat import S_IWUSR, S_IXUSR
 from tempfile import mkstemp
 from nose.tools import raises, istest, eq_
 from priv.holgi.mediacopy.filelib import validate_destination, \
-    copy_file, similar_filenames, find_similar_filenames
+    copy_file, copy_newfile, is_knownfiletype, \
+    similar_filenames, find_similar_filenames
 from priv.holgi.mediacopy.tests.mediacp_base_test import MediacpTestBase
 
 class ValidateDestination_Test(MediacpTestBase):
@@ -84,6 +85,12 @@ class CopyFile_Test(MediacpTestBase):
         eq_(retval, True)
 
     @istest
+    def copy_file_doesntcopy_unknownfiles(self):
+        # we try to copy ourself!
+        assert not(is_knownfiletype(__file__))
+        eq_(copy_file(__file__, self.destdir), False)
+        
+    @istest
     def copyfile_doesnt_overwrite(self):
         # we use an initial copy as test setup condition
         copy_file(self.testfile, self.destdir)
@@ -93,7 +100,22 @@ class CopyFile_Test(MediacpTestBase):
     def copyfile_overwrites_when_forced(self):
         # we use an initial copy as test setup condition
         copy_file(self.testfile, self.destdir)
-        eq_(copy_file(self.testfile, self.destdir, True), True)
+        eq_(copy_file(self.testfile, self.destdir, overwrite=True), True)
+
+
+    @istest
+    def copy_newfile_doesnt_overwrite_similarfiles(self):
+        # we use an initial copy as test setup condition
+        copy_file(self.testfile, self.destdir)
+        eq_(copy_newfile(self.testfile, self.destdir), False)
+
+    @istest
+    def copy_newfile_overwrites_similarfiles_when_forced(self):
+        # we use an initial copy as test setup condition
+        copy_file(self.testfile, self.destdir)
+        eq_(copy_newfile(self.testfile, self.destdir, overwrite=True), True)
+
+        
 
 class SimilarFile_Test(MediacpTestBase):
 

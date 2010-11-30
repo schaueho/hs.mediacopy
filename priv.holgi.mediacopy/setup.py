@@ -28,6 +28,7 @@ setup(name='priv.holgi.mediacopy',
       install_requires=[
           'setuptools',
           # -*- Extra requirements: -*-
+          'python-magic',
       ],
       dependency_links = [
         "http://sourceforge.net/projects/exif-py/files/"
