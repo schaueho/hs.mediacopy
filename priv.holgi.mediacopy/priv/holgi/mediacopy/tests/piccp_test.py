@@ -1,7 +1,8 @@
 import copy 
 from nose.tools import raises, eq_, istest
 from priv.holgi.mediacopy.tests.mediacp_base_test import MediacpTestBase
-from priv.holgi.mediacopy.piccp import parse_exif, ImageMetaInfo
+from priv.holgi.mediacopy.piccp import ImageMetaInfo, \
+     parse_exif, imagemetainfo_from_file, EXIFTAGS
 
 class Exif_Test(MediacpTestBase):
     
@@ -65,3 +66,22 @@ class ImageMetaInfo_Test(MediacpTestBase):
         img2.exiftags = copy.copy(exifmock)
         img2.exiftags['tag3'] = 'a new tag'
         eq_(img.is_similar(img2), False)
+
+    @istest
+    def imagemetainfo_from_file_returns_imagemetainfo(self):
+        imi = imagemetainfo_from_file(self.testfile)
+        eq_(isinstance(imi, ImageMetaInfo), True)
+        eq_(imi.name, self.testfilename)
+        eq_(imi.abspath, self.testfile)
+        eq_(type(imi.exiftags), dict)
+
+    @istest
+    def imagemetainfo_contains_exiftags(self):
+        imi = imagemetainfo_from_file(self.testfile)
+        for tagname in EXIFTAGS:
+            try:
+                imi.exiftags[tagname]
+            except KeyError:
+                return False
+        return True
+            

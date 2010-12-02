@@ -2,11 +2,20 @@ import os
 import EXIF as exif
 from priv.holgi.mediacopy.metainfo import MetaInfo
 
+EXIFTAGS = [
+    'EXIF DateTimeOriginal',
+    'Image Model',
+    'Image Make',
+    ]
+
 def imagemetainfo_from_file(filename):
     ''' Return an ImageMetaInfo object from file '''
-    tags = parse_exif(filename)
+    exiftags = {}
+    original_exiftags = parse_exif(filename)
+    for key in EXIFTAGS:
+        exiftags[key] = original_exiftags.get(key, None)
     basename = os.path.basename(filename)
-    return ImageMetaInfo(basename, filename, exiftags=tags)
+    return ImageMetaInfo(basename, filename, exiftags=exiftags)
 
 def parse_exif(filename):
     ''' Parse exif tag from file '''

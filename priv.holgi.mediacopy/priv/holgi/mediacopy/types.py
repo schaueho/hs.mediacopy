@@ -20,4 +20,8 @@ def get_mimetype(filename):
     mime = magic.Magic(mime=True)
     return mime.from_file(filename)
 
+def get_metainfo(filename):
+    filetype = get_mimetype(filename)
+    if filetype in FILETYPES2METAINFO:
+        return FILETYPES2METAINFO[filetype](filename)
 
