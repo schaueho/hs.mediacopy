@@ -1,8 +1,9 @@
+import copy 
 from nose.tools import raises, eq_, istest
 from priv.holgi.mediacopy.tests.mediacp_base_test import MediacpTestBase
-from priv.holgi.mediacopy.piccp import parse_exif
+from priv.holgi.mediacopy.piccp import parse_exif, ImageMetaInfo
 
-class Piccp_Test(MediacpTestBase):
+class Exif_Test(MediacpTestBase):
     
     def setUp(self):
         self._setup_testpic()
@@ -36,3 +37,31 @@ class Piccp_Test(MediacpTestBase):
         '''Image Make is required data'''
         exiftags = self.parse_testpic()
         eq_('%s' % exiftags['Image Make'], '''CASIO COMPUTER CO.,LTD ''')
+
+class ImageMetaInfo_Test(MediacpTestBase):
+    
+    def setUp(self):
+        self._setup_testpic()
+        
+    @istest
+    def equal_images_are_similar(self):
+        exifmock = {'tag1': 1, 'tag2': 'some string'}
+        img = ImageMetaInfo(self.testfilename,self.testfile,exifmock)
+        img2 = copy.copy(img)
+        eq_(img.is_similar(img2), True)
+
+    @istest
+    def images_withdifferentexiftags_arent_similar(self):
+        exifmock = {'tag1': 1, 'tag2': 'some string'}
+        img = ImageMetaInfo(self.testfilename,self.testfile,exifmock)
+        img2 = copy.copy(img)
+        eq_(img.is_similar(img2), True)
+
+    @istest
+    def images_withdifferentexiftags_arent_similar(self):
+        exifmock = {'tag1': 1, 'tag2': 'some string'}
+        img = ImageMetaInfo(self.testfilename,self.testfile,exifmock)
+        img2 = copy.copy(img)
+        img2.exiftags = copy.copy(exifmock)
+        img2.exiftags['tag3'] = 'a new tag'
+        eq_(img.is_similar(img2), False)
