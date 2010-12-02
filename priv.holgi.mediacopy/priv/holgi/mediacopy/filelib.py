@@ -1,17 +1,14 @@
 import os
 import shutil
-import magic
 from stat import S_ISDIR, S_ISREG, ST_MODE
 from priv.holgi.mediacopy.utils import logger
+from priv.holgi.mediacopy.types import is_knownfiletype
 
 _EXTENSION_TABLE = {
     '.jpg' : '.jpg',
     '.jpeg': '.jpg',
     }
 
-_KNOWN_FILETYPES = [
-    'image/jpeg',
-    ]
 
 def copy_newfile(filename, destination, copyunknown=False, 
                  overwrite=False, noaction=False):
@@ -105,16 +102,6 @@ def validate_destination(dest):
            os.access(dest, os.W_OK | os.X_OK)):
         raise IOError("Destination %s doesn't exist or isn't writable" % dest)
     return True
-
-def is_knownfiletype(filename):
-    ''' Determine if we know how to handle a given file '''
-    if get_mimetype(filename) in _KNOWN_FILETYPES:
-        return True
-
-def get_mimetype(filename):
-    ''' Determine the (mime) type of a given file '''
-    mime = magic.Magic(mime=True)
-    return mime.from_file(filename)
 
 def walktree(top, callback):
     ''' recursively descend the directory tree rooted at top,

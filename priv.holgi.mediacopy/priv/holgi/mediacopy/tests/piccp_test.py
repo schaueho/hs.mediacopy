@@ -46,21 +46,21 @@ class ImageMetaInfo_Test(MediacpTestBase):
     @istest
     def equal_images_are_similar(self):
         exifmock = {'tag1': 1, 'tag2': 'some string'}
-        img = ImageMetaInfo(self.testfilename,self.testfile,exifmock)
+        img = ImageMetaInfo(self.testfilename, self.testfile, exiftags=exifmock)
         img2 = copy.copy(img)
         eq_(img.is_similar(img2), True)
 
     @istest
     def images_withdifferentexiftags_arent_similar(self):
         exifmock = {'tag1': 1, 'tag2': 'some string'}
-        img = ImageMetaInfo(self.testfilename,self.testfile,exifmock)
+        img = ImageMetaInfo(self.testfilename, self.testfile, exiftags=exifmock)
         img2 = copy.copy(img)
         eq_(img.is_similar(img2), True)
 
     @istest
     def images_withdifferentexiftags_arent_similar(self):
         exifmock = {'tag1': 1, 'tag2': 'some string'}
-        img = ImageMetaInfo(self.testfilename,self.testfile,exifmock)
+        img = ImageMetaInfo(self.testfilename, self.testfile, exiftags=exifmock)
         img2 = copy.copy(img)
         img2.exiftags = copy.copy(exifmock)
         img2.exiftags['tag3'] = 'a new tag'
