@@ -29,7 +29,8 @@ class MetadataCollection(object):
     def printall(self):
         for (name, metadata) in self.metadata.items():
             print "%s:%s" % (name, metadata)
-
+        print "Seen number of items: %s" % len(self.metadata.keys())
+        
 def main():
     callback = None
     parser, options, args = parse_options()
