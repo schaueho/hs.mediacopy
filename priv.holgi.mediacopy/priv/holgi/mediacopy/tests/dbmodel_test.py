@@ -1,12 +1,14 @@
+import logging
 from sqlalchemy import *
 from sqlalchemy.orm import *
 from nose.tools import eq_, istest
 from fixture import DataTestCase, SQLAlchemyFixture
-
 from priv.holgi.mediacopy.utils import logger
 from priv.holgi.mediacopy import dbmodel
 from priv.holgi.mediacopy.tests.dbmodel_fixture import ImageMetaInfoModel_Data
 
+logging.basicConfig()
+logging.getLogger('sqlalchemy.engine').setLevel(logging.DEBUG)
 
 class DbModel_Test(DataTestCase):
 
@@ -14,27 +16,30 @@ class DbModel_Test(DataTestCase):
     testdsn = 'sqlite://'
     
     def setUp(self):
-        self._make_fixture()
+        self._make_dbconn()
+        self._make_fixture(self.engine)
         super(DbModel_Test, self).setUp()
         Session = scoped_session(sessionmaker(bind=self.metadata.bind,
                                               autoflush=True, autocommit=False))
         self.session = Session()
 
     def tearDown(self):
-        self.datapool.teardown()
+        self.data.teardown()
 
-    def _make_fixture(self):
-        # we use our test engine and stuff it under the declarative Base!
-        enginekeys = { 'echo': True }
-        engine = create_engine(self.testdsn,**enginekeys)
-        dbmodel.Base.metadata.bind = engine
+    def _make_dbconn(self):
+        enginekeys = { } # { 'echo': True }
+        self.engine = create_engine(self.testdsn,**enginekeys)
+        dbmodel.Base.metadata.bind = self.engine
         self.metadata = dbmodel.Base.metadata
-        self.metadata.create_all(engine)
+        self.metadata.create_all(self.engine)
+
+    def _make_fixture(self, engine):
+        # we use our test engine and stuff it under the declarative Base!
         dataenv = { 'ImageMetaInfoModel_Data': dbmodel.ImageMetaInfoModel,
                     }
-        self.fixture = SQLAlchemyFixture(env=dataenv,engine=self.metadata.bind)
-        self.datapool = self.fixture.data()
-        self.datapool.setup()
+        self.fixture = SQLAlchemyFixture(env=dataenv,engine=engine)
+        self.data = self.fixture.data()
+        self.data.setup()
         self.datasets = [ImageMetaInfoModel_Data, ]
 
     @istest
