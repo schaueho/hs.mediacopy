@@ -29,6 +29,8 @@ setup(name='priv.holgi.mediacopy',
           'setuptools',
           # -*- Extra requirements: -*-
           'python-magic',
+          'pysqlite',
+          'sqlalchemy',
       ],
       dependency_links = [
         "http://sourceforge.net/projects/exif-py/files/"
@@ -36,7 +38,7 @@ setup(name='priv.holgi.mediacopy',
         "http://downloads.sourceforge.net/project/exif-py/EXIF/1.0.8/",
       ],
       test_suite='nose.collector',
-      test_requires=['Nose'],
+      test_requires=['Nose','fixture[decorators]'],
       entry_points="""
       # -*- Entry points: -*-
       """,
