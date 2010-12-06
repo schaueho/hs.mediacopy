@@ -6,20 +6,20 @@
 |     |                                                         |         |
 |     |                                                         |         |
 +-----+---------------------------------------------------------+---------+
-|2    |Als Kamerabenutzer erwarte ich, dass Bilder von meiner   |         |
+|2    |Als Kamerabenutzer erwarte ich, dass Bilder von meiner   |in Arbeit|
 |     |Kamera, die ich schon kopiert habe, nicht noch einmal    |         |
 |     |kopiert werden.                                          |         |
 |     |                                                         |         |
 |     |                                                         |         |
 |     |                                                         |         |
 +-----+---------------------------------------------------------+---------+
-|3    |Als Kamerabenutzer kann ich explizit angeben, dass ich   |         |
+|3    |Als Kamerabenutzer kann ich explizit angeben, dass ich   |erledigt |
 |     |auch Doubletten erneut kopieren will.                    |         |
 |     |                                                         |         |
 |     |                                                         |         |
 |     |                                                         |         |
 +-----+---------------------------------------------------------+---------+
-|4    |Als Kamerabenutzer kann ich das Zielverzeichnis explizit |         |
+|4    |Als Kamerabenutzer kann ich das Zielverzeichnis explizit |erledigt |
 |     |angeben.                                                 |         |
 |     |                                                         |         |
 |     |                                                         |         |
