@@ -90,7 +90,7 @@ def reduce_filename(filename):
     solely of downcased letters (insofar possible). We also reduce
     filename extensions to canonical versions using a lookup table.
     '''
-    return reduce_fileext(filename.lower())
+    return u'%s' % reduce_fileext(os.path.basename(filename).lower())
 
 def target_exists(destination, filename):
     ''' Determine whether filename exists at destination '''
