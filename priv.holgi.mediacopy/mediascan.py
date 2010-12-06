@@ -2,47 +2,57 @@
 
 import os
 from optparse import OptionParser
+from priv.holgi.mediacopy.utils import logger
+from priv.holgi.mediacopy.types import get_metainfo
+from priv.holgi.mediacopy.infostore import make_infostore
 from priv.holgi.mediacopy.filelib import validate_destination, \
     walktree
-from priv.holgi.mediacopy.types import get_metainfo
 
 def parse_options():
     usage = "usage: %prog [options] sourcedir"
     parser = OptionParser(usage=usage)
     parser.add_option('-v', '--verbose', dest="verbose", action="store_true",
                       help="verbose logging")
+    parser.add_option('-n', "--don't write database", dest="nowrite",
+                      action="store_true", help="verbose logging")
     options, args = parser.parse_args()
     if len(args) != 1:
         parser.error("incorrect number of arguments")
     return [parser, options, args]
 
-class MetadataCollection(object):
+def storeinfo_from_dir(sourcedir, nowrite):
+    def count_and_store_metainfo(store, filename, count):
+        ''' Store metainfos and return the number of seen files '''
+        store.put_metainfo(get_metainfo(filename))
+        count = count + 1
+        return count
 
-    def __init__(self):
-        self.metadata = {}
+    if nowrite:
+        dsn = 'sqlite://'
+    else:
+        dsn = 'sqlite:///'+sourcedir+'mediacopy.db'
+    infostore = make_infostore(dsn)
+    callback  = lambda f,g : count_and_store_metainfo(infostore, f, g)
+    seen = walktree(sourcedir, callback, 0)
+    print "Saw %s files" % seen
+    return infostore
 
-    def add_metainfo(self, metainfo):
-        if metainfo:
-            self.metadata[metainfo.name] = metainfo
-        return self
+def show_summary_of_current_mis(infostore, verbose):
+    current_mis = infostore.get_all_metainfos()
+    if verbose:
+        for mi in current_mis:
+            logger.info("Looking at: %s" % mi.name)
+    print "Stored metainfo items: %s" % len(current_mis)
 
-    def printall(self):
-        for (name, metadata) in self.metadata.items():
-            print "%s:%s" % (name, metadata)
-        print "Seen number of items: %s" % len(self.metadata.keys())
-        
 def main():
-    callback = None
     parser, options, args = parse_options()
     try:
         validate_destination(args[0])
     except IOError, e:
         parser.print_help()
         raise e
-    collection = MetadataCollection()
-    callback = lambda f: collection.add_metainfo(get_metainfo(f))
-    walktree(args[0], callback)
-    collection.printall()
+    infostore= storeinfo_from_dir(args[0], options.nowrite)
+    show_summary_of_current_mis(infostore, options.verbose)
 
 if __name__ == "__main__":
     main()
