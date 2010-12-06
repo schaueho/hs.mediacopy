@@ -27,9 +27,9 @@ class InfoStore(object):
     def put_metainfo(self, metainfo):
         ''' Put metainfo as a new info object into store '''
         mimodel = self._translate_metainfo_to_metainfomodel(metainfo)
+        self._session.begin()
         self._session.add(mimodel)
         self._session.commit()
-        self._session.detach(mimodel)
 
     def _translate_metainfo_to_metainfomodel(self, metainfo):
         ''' Make a new MetaInfoModel object from metainfo '''
@@ -52,11 +52,9 @@ class InfoStore(object):
         else:
             raise ValueError("Can't determine discriminator from %s" % metainfo)
         
-    def get_all_metainfos(self, key, value):
+    def get_all_metainfos(self, **criteria):
         ''' Return all metainfo objects from the store matching 
         the criteria key=value. Key needs to be of type string. '''
-        key = key.lower()
-        criteria = { key: value }
         result = self._session.query(MetaInfoModel).filter_by(**criteria).all()
         return result
 

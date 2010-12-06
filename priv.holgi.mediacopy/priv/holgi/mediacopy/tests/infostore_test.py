@@ -8,11 +8,11 @@ from priv.holgi.mediacopy.dbmodel import ImageMetaInfoModel
 class InfoStore_Test(DbModel_Test, MediacpTestBase):
     
     def setUp(self):
-        # don't call super, we reuse the stuff in a particular way
         self.infostore = make_infostore(self.testdsn)
         self._make_fixture(self.infostore._engine)
         self.session = self.infostore._session
         self._setup_testpic()
+        super(DbModel_Test, self).setUp()
 
     @istest
     def get_discriminator_for_ImageMetaInfo(self):
@@ -22,11 +22,12 @@ class InfoStore_Test(DbModel_Test, MediacpTestBase):
     @istest
     def put_metainfo_creates_object_in_db(self):
         imi = imagemetainfo_from_file(self.testfile)
+        eq_(len(self.infostore.get_all_metainfos()), 1)
         self.infostore.put_metainfo(imi)
-        eq_(len(self.infostore.get_all_metainfos('discriminator','image')), 2)
+        eq_(len(self.infostore.get_all_metainfos()), 2)
 
     @istest
     def get_all_metainfos_finds_fixturedata(self):
-        eq_(len(self.infostore.get_all_metainfos('discriminator','image')), 1)
+        eq_(len(self.infostore.get_all_metainfos(discriminator='image')), 1)
 
         
