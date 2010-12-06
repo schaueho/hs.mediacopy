@@ -1,8 +1,9 @@
 import copy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
-from priv.holgi.mediacopy.metainfo import MetaInfo
-from priv.holgi.mediacopy.dbmodel import Base, MetaInfoModel
+from priv.holgi.mediacopy import dbmodel
+from priv.holgi.mediacopy.utils import logger
+from priv.holgi.mediacopy.types import modelclass_for_mi
 
 class InfoStore(object):
     ''' An InfoStore stores meta info about media objects
@@ -26,18 +27,22 @@ class InfoStore(object):
 
     def put_metainfo(self, metainfo):
         ''' Put metainfo as a new info object into store '''
+        if not(metainfo): return
         mimodel = self._translate_metainfo_to_metainfomodel(metainfo)
         self._session.begin()
         self._session.add(mimodel)
         self._session.commit()
+        self._session.close()
 
     def _translate_metainfo_to_metainfomodel(self, metainfo):
         ''' Make a new MetaInfoModel object from metainfo '''
     
         keys = metainfo.keys()
         discriminator = self._get_discriminator(metainfo)
-        mimodel = MetaInfoModel()
-        for key in keys:
+        mimodel = modelclass_for_mi(metainfo)()
+        allkeys = ['name','abspath'] + keys
+        for key in allkeys:
+            logger.debug('Adding key %s -> %s' % (key, getattr(metainfo, key)))
             setattr(mimodel, key, getattr(metainfo, key))
         mimodel.discriminator = discriminator
         return mimodel
@@ -55,12 +60,12 @@ class InfoStore(object):
     def get_all_metainfos(self, **criteria):
         ''' Return all metainfo objects from the store matching 
         the criteria key=value. Key needs to be of type string. '''
-        result = self._session.query(MetaInfoModel).filter_by(**criteria).all()
+        result = self._session.query(dbmodel.MetaInfoModel).filter_by(**criteria).all()
         return result
 
 def make_infostore(dsn):
     ''' Returns an infostore, with possibly empty data '''
-    metadata = Base.metadata
+    metadata = dbmodel.Base.metadata
     infostore = InfoStore(dsn, metadata)
     return infostore
 
