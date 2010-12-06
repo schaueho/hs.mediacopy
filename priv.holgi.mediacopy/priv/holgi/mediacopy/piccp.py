@@ -1,6 +1,7 @@
 import os
 import EXIF as exif
-from priv.holgi.mediacopy.metainfo import MetaInfo
+from priv.holgi.mediacopy.utils import logger
+from priv.holgi.mediacopy.metainfo import ImageMetaInfo
 
 EXIFTAGS = [
     'EXIF DateTimeOriginal',
@@ -13,7 +14,9 @@ def imagemetainfo_from_file(filename):
     exiftags = {}
     original_exiftags = parse_exif(filename)
     for key in EXIFTAGS:
-        exiftags[key] = original_exiftags.get(key, None)
+        mkey = key.lower()
+        mkey = mkey.replace(' ','_')
+        exiftags[mkey] = original_exiftags.get(key, None)
     basename = os.path.basename(filename)
     return ImageMetaInfo(basename, filename, exiftags=exiftags)
 
@@ -27,36 +30,3 @@ def parse_exif(filename):
         pass
     return tags
 
-class ImageMetaInfo(MetaInfo):
-    
-    def __init__(self, name, abspath, **kw):
-        super(ImageMetaInfo, self).__init__(name, abspath, **kw)
-        if not('exiftags' in kw.keys()):
-            raise KeyError("Missing exiftags parameter")
-        
-    def is_similar(self, image):
-        ''' Check whether two ImageMetaInfo objects are similar
-        We check the name as well as the exif information for now.
-        '''
-        if (self.name == image.name):
-            selftags = self.exiftags.keys()
-            othertags = image.exiftags.keys()
-            selftags.sort()
-            othertags.sort()
-            if not(selftags == othertags):
-                return False
-            for tagname in selftags:
-                othervalue=None
-                try:
-                    othervalue=image.exiftags[tagname]
-                except KeyError:
-                    return False
-                else:
-                    if not(self.exiftags[tagname] == othervalue):
-                        return False
-            return True
-        else:
-            return False
-
-
-    

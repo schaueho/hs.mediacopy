@@ -1,8 +1,9 @@
 import copy 
 from nose.tools import raises, eq_, istest
 from priv.holgi.mediacopy.tests.mediacp_base_test import MediacpTestBase
-from priv.holgi.mediacopy.piccp import ImageMetaInfo, \
-     parse_exif, imagemetainfo_from_file, EXIFTAGS
+from priv.holgi.mediacopy.metainfo import ImageMetaInfo
+from priv.holgi.mediacopy.piccp import parse_exif, \
+    imagemetainfo_from_file, EXIFTAGS
 
 class Exif_Test(MediacpTestBase):
     
@@ -48,7 +49,7 @@ class ImageMetaInfo_Test(MediacpTestBase):
     def equal_images_are_similar(self):
         exifmock = {'tag1': 1, 'tag2': 'some string'}
         img = ImageMetaInfo(self.testfilename, self.testfile, exiftags=exifmock)
-        img2 = copy.copy(img)
+        img2 = ImageMetaInfo(self.testfilename, self.testfile, exiftags=exifmock)
         eq_(img.is_similar(img2), True)
 
     @istest
@@ -61,10 +62,9 @@ class ImageMetaInfo_Test(MediacpTestBase):
     @istest
     def images_withdifferentexiftags_arent_similar(self):
         exifmock = {'tag1': 1, 'tag2': 'some string'}
+        exifmock2 = {'tag1': 2, 'tag2': 'some other string'}
         img = ImageMetaInfo(self.testfilename, self.testfile, exiftags=exifmock)
-        img2 = copy.copy(img)
-        img2.exiftags = copy.copy(exifmock)
-        img2.exiftags['tag3'] = 'a new tag'
+        img2 = ImageMetaInfo(self.testfilename, self.testfile, exiftags=exifmock2)
         eq_(img.is_similar(img2), False)
 
     @istest
@@ -73,15 +73,14 @@ class ImageMetaInfo_Test(MediacpTestBase):
         eq_(isinstance(imi, ImageMetaInfo), True)
         eq_(imi.name, self.testfilename)
         eq_(imi.abspath, self.testfile)
-        eq_(type(imi.exiftags), dict)
 
     @istest
     def imagemetainfo_contains_exiftags(self):
         imi = imagemetainfo_from_file(self.testfile)
         for tagname in EXIFTAGS:
             try:
-                imi.exiftags[tagname]
-            except KeyError:
+                imi.tagname
+            except AttributeError:
                 return False
         return True
             
