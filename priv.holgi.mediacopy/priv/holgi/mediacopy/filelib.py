@@ -103,22 +103,35 @@ def validate_destination(dest):
         raise IOError("Destination %s doesn't exist or isn't writable" % dest)
     return True
 
-def walktree(top, callback):
+__unspecified__ = object()
+def walktree(top, callback, acc=__unspecified__):
     ''' recursively descend the directory tree rooted at top,
         calling the callback function for each regular file
+        'acc' can be used as an additional parameter for
+        accumulating results which will be returned.
     '''
+    accvalue = None
+    if not(acc is __unspecified__):
+        accvalue = acc
     for filename in os.listdir(top):
         pathname = os.path.join(top, filename)
         mode = os.stat(pathname)[ST_MODE]
         if S_ISDIR(mode):
             # It's a directory, recurse into it
-            walktree(pathname, callback)
+            if not(acc is __unspecified__):
+                accvalue = walktree(pathname, callback, accvalue)
+            else:
+                walktree(pathname, callback)
         elif S_ISREG(mode):
             # It's a file, call the callback function
-            callback(pathname)
+            if not(acc is __unspecified__):
+                accvalue = callback(pathname, accvalue)
+            else:
+                callback(pathname)
         else:
             # Unknown file type, print a message
             print 'Skipping %s' % pathname
+    return accvalue
 
 def print_filename(filename):
     ''' Just print out the name of the file we would visit '''
