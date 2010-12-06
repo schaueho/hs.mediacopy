@@ -71,7 +71,7 @@ class ImageMetaInfo_Test(MediacpTestBase):
     def imagemetainfo_from_file_returns_imagemetainfo(self):
         imi = imagemetainfo_from_file(self.testfile)
         eq_(isinstance(imi, ImageMetaInfo), True)
-        eq_(imi.name, self.testfilename)
+        eq_(imi.name, u'%s' % self.testfilename.lower())
         eq_(imi.abspath, self.testfile)
 
     @istest

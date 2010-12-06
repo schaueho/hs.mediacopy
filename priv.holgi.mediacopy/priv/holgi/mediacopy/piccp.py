@@ -16,8 +16,12 @@ def imagemetainfo_from_file(filename):
     for key in EXIFTAGS:
         mkey = key.lower()
         mkey = mkey.replace(' ','_')
-        exiftags[mkey] = original_exiftags.get(key, None)
-    basename = os.path.basename(filename)
+        mvalue = original_exiftags.get(key, None)
+        if mvalue:
+            exiftags[mkey] = str(mvalue)
+        else:
+            exiftags[mkey] = mvalue
+    basename = u'%s' % os.path.basename(filename).lower()
     return ImageMetaInfo(basename, filename, exiftags=exiftags)
 
 def parse_exif(filename):
