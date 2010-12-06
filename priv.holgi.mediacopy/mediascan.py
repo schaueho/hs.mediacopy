@@ -5,8 +5,8 @@ from optparse import OptionParser
 from priv.holgi.mediacopy.utils import logger
 from priv.holgi.mediacopy.types import get_metainfo
 from priv.holgi.mediacopy.infostore import make_infostore
-from priv.holgi.mediacopy.filelib import validate_destination, \
-    walktree
+from priv.holgi.mediacopy.filelib import reduce_filename, \
+    validate_destination, walktree
 
 def parse_options():
     usage = "usage: %prog [options] sourcedir"
@@ -21,20 +21,29 @@ def parse_options():
     return [parser, options, args]
 
 def storeinfo_from_dir(sourcedir, nowrite):
-    def count_and_store_metainfo(store, filename, count):
+    
+    def count_and_store_metainfo(store, filename, counts):
         ''' Store metainfos and return the number of seen files '''
-        store.put_metainfo(get_metainfo(filename))
-        count = count + 1
-        return count
+        (seen, dupes) = counts
+        basename = reduce_filename(filename)
+        result = store.get_all_metainfos(name=basename)
+        if len(result) >= 1:
+            dupes = dupes + 1
+            logger.info("Ignoring duplicate %s" % basename)
+        else:
+            store.put_metainfo(get_metainfo(filename))
+        seen = seen + 1
+        return (seen, dupes)
 
     if nowrite:
         dsn = 'sqlite://'
     else:
         dsn = 'sqlite:///'+sourcedir+'mediacopy.db'
     infostore = make_infostore(dsn)
+
     callback  = lambda f,g : count_and_store_metainfo(infostore, f, g)
-    seen = walktree(sourcedir, callback, 0)
-    print "Saw %s files" % seen
+    (seen, dupes) = walktree(sourcedir, callback, (0, 0))
+    print "Saw %s files and %s duplicates" % (seen, dupes)
     return infostore
 
 def show_summary_of_current_mis(infostore, verbose):
