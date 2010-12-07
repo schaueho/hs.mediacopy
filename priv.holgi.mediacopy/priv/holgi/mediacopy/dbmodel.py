@@ -14,10 +14,11 @@ of any 'MetaInfo' suffix.
 
 class MetaInfoModel(Base):
     __tablename__ = 'metainfo'
-    id = Column('id', Integer, Sequence('metainfo_id_seq'), primary_key=True)
-    name = Column('name', String(255))
+    id = Column('id', Integer, Sequence('metainfo_id_seq'), 
+                primary_key=True)
+    name = Column('name', String(255), index=True)
     abspath = Column('abspath', String)
-    discriminator = Column('type', String(20))
+    discriminator = Column('type', String(20), index=True)
     __mapper_args__ = {'polymorphic_on': discriminator}
 
 class ImageMetaInfoModel(MetaInfoModel):
