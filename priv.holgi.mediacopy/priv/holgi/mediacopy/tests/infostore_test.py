@@ -46,7 +46,7 @@ class InfoStore_Test(DbModel_Test, MediacpTestBase):
         result = self.infostore.get_all_metainfos(discriminator='image', 
                                                   name=imi.name)
         eq_(len(result), 1)
-        eq_(isinstance(result[0], ImageMetaInfoModel), True)
+        eq_(isinstance(result[0], ImageMetaInfo), True)
         eq_(result[0].exif_datetimeoriginal, 
             str(self.data.ImageMetaInfoModel_Data.cimg2448.exif_datetimeoriginal))
         eq_(result[0].image_make, 

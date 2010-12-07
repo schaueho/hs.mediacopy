@@ -3,7 +3,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from priv.holgi.mediacopy import dbmodel
 from priv.holgi.mediacopy.utils import logger
-from priv.holgi.mediacopy.types import modelclass_for_mi
+from priv.holgi.mediacopy.types import modelclass_for_mi, \
+    miclass_for_model
 
 class InfoStore(object):
     ''' An InfoStore stores meta info about media objects
@@ -60,8 +61,23 @@ class InfoStore(object):
     def get_all_metainfos(self, **criteria):
         ''' Return all metainfo objects from the store matching 
         the criteria key=value. Key needs to be of type string. '''
-        result = self._session.query(dbmodel.MetaInfoModel).filter_by(**criteria).all()
+        result = []
+        dbresult = self._session.query(dbmodel.MetaInfoModel).filter_by(**criteria).all()
+        if len(dbresult) > 0:
+            result = [ self._translate_metainfomodel_to_metainfo(model) for model in dbresult ]
         return result
+
+    def _translate_metainfomodel_to_metainfo(self, model):
+        ''' Make a new MetaInfo object from model '''
+    
+        modelklass = model.__class__
+        attribs = [key for key in modelklass.__dict__.keys() \
+                       if (not('__' in key) and \
+                               not(key in ['id','name','abspath']))]
+        metainfo = miclass_for_model(model)(model.name, model.abspath)
+        info = dict([(attrib,getattr(model,attrib)) for attrib in attribs])
+        metainfo.setInfo(**info)
+        return metainfo
 
 def make_infostore(dsn):
     ''' Returns an infostore, with possibly empty data '''
