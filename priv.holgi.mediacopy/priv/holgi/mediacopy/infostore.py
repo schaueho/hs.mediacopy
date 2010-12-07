@@ -4,7 +4,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from priv.holgi.mediacopy import dbmodel
 from priv.holgi.mediacopy.utils import logger
 from priv.holgi.mediacopy.types import modelclass_for_mi, \
-    miclass_for_model
+    miclass_for_model, get_metainfo
 
 class InfoStore(object):
     ''' An InfoStore stores meta info about media objects
@@ -77,7 +77,17 @@ class InfoStore(object):
         metainfo = miclass_for_model(model)(model.name, model.abspath)
         info = dict([(attrib,getattr(model,attrib)) for attrib in attribs])
         metainfo.setInfo(**info)
+        metainfo.id = model.id
         return metainfo
+
+    def find_similar(self, metainfo):
+        ''' Find a MetaInfo in store that is similar to metainfo '''
+        dupecands = self.get_all_metainfos(name=metainfo.name)
+        if len(dupecands) > 0:
+            for candidate in dupecands:
+                if metainfo.is_similar(candidate):
+                    return candidate
+        return None
 
 def make_infostore(dsn):
     ''' Returns an infostore, with possibly empty data '''
@@ -85,4 +95,8 @@ def make_infostore(dsn):
     infostore = InfoStore(dsn, metadata)
     return infostore
 
-    
+def is_duplicate(store, filename):
+    ''' Check whether MetaInfo for filename is already contained in store '''
+    metainfo = get_metainfo(filename)
+    return store.find_similar(metainfo)
+
