@@ -13,24 +13,25 @@ def imagemetainfo_from_file(filename):
     ''' Return an ImageMetaInfo object from file '''
     exiftags = {}
     original_exiftags = parse_exif(filename)
-    for key in EXIFTAGS:
-        mkey = key.lower()
-        mkey = mkey.replace(' ','_')
-        mvalue = original_exiftags.get(key, None)
-        if mvalue:
-            exiftags[mkey] = str(mvalue)
-        else:
-            exiftags[mkey] = mvalue
+    if original_exiftags:
+        for key in EXIFTAGS:
+            mkey = key.lower()
+            mkey = mkey.replace(' ','_')
+            mvalue = original_exiftags.get(key, None)
+            if mvalue:
+                exiftags[mkey] = str(mvalue)
+            else:
+                exiftags[mkey] = mvalue
     basename = u'%s' % os.path.basename(filename).lower()
     return ImageMetaInfo(basename, filename, exiftags=exiftags)
 
 def parse_exif(filename):
     ''' Parse exif tag from file '''
-    tags = None
-    f = open(filename, 'rb')
+    tags = {}
+    fhandle = open(filename, 'rb')
     try:
-        tags = exif.process_file(f)
+        tags = exif.process_file(fhandle)
     except:
-        pass
+        fhandle.close()
     return tags
 
