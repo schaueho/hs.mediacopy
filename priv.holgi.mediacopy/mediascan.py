@@ -6,7 +6,7 @@ from priv.holgi.mediacopy.utils import logger
 from priv.holgi.mediacopy.types import get_metainfo
 from priv.holgi.mediacopy.infostore import make_infostore
 from priv.holgi.mediacopy.filelib import reduce_filename, \
-    validate_destination, walktree
+    validate_destination, walktree, print_filename
 
 def parse_options():
     usage = "usage: %prog [options] sourcedir"
@@ -20,16 +20,27 @@ def parse_options():
         parser.error("incorrect number of arguments")
     return [parser, options, args]
 
-def storeinfo_from_dir(sourcedir, nowrite):
+def is_duplicate(store, filename):
+    ''' Check whether MetaInfo for filename is already contained in store '''
+    basename = reduce_filename(filename)
+    if store.find_similar_by_name(basename):
+        metainfo = get_metainfo(filename)
+        if metainfo:
+            result = store.find_similar(metainfo)
+            return result
+    return False
+    
+def storeinfo_from_dir(sourcedir, nowrite, verbose=False):
     
     def count_and_store_metainfo(store, filename, counts):
         ''' Store metainfos and return the number of seen files '''
         (seen, dupes) = counts
         basename = reduce_filename(filename)
-        result = store.get_all_metainfos(name=basename)
-        if len(result) >= 1:
-            dupes = dupes + 1
+        if verbose:
+            logger.info("Scanning %s" % basename)
+        if is_duplicate(store, filename):
             logger.info("Ignoring duplicate %s" % basename)
+            dupes = dupes + 1
         else:
             store.put_metainfo(get_metainfo(filename))
         seen = seen + 1
@@ -60,7 +71,7 @@ def main():
     except IOError, e:
         parser.print_help()
         raise e
-    infostore= storeinfo_from_dir(args[0], options.nowrite)
+    infostore= storeinfo_from_dir(args[0], options.nowrite, options.verbose)
     show_summary_of_current_mis(infostore, options.verbose)
 
 if __name__ == "__main__":
