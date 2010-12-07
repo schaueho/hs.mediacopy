@@ -25,10 +25,9 @@ def copy_newfile(filename, destination, copyunknown=False,
                         os.path.join(destination, basename))
         return False
     else:
-        return copy_file(filename, destination, copyunknown, overwrite, noaction)
+        return copy_file(filename, destination, overwrite, noaction)
 
-def copy_file(filename, destination, copyunknown=False, 
-              overwrite=False, noaction=False):
+def copy_file(filename, destination, overwrite=False, noaction=False):
     ''' Copy file to destination 
     Returns True on successful copying.
     '''
