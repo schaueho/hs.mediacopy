@@ -19,7 +19,7 @@ MICLASS2MIMODELCLASS = {
     }
 
 MODELDISCRIMINATOR2MICLASS = {
-    'image': ImageMetaInfoModel,
+    'image': ImageMetaInfo,
 }
 
 def is_knownfiletype(filename):
