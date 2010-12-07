@@ -15,7 +15,7 @@ def copy_newfile(filename, destination, copyunknown=False,
     ''' Copy file to destination only if we think it's new
     Returns True on successful copying
     '''
-    basename = os.path.basename(filename)
+    basename = reduce_filename(filename)
     if not(is_knownfiletype(filename)) and not(copyunknown):
         logger.info("Unknown file type, ignoring %s" % filename)
         return False
@@ -51,7 +51,7 @@ def find_similar_filenames(destination, filename):
     existing_targets = get_existing_targets(destination)
     for existing_file in existing_targets.keys():
         if similar_filenames(filename, existing_file):
-            match.append(existing_targets[filename])
+            match.append(existing_targets[existing_file])
             break
     return match
 
@@ -67,7 +67,6 @@ def get_existing_targets(destination):
 
 def similar_filenames(filename1, filename2):
     ''' Check whether two file names are similar 
-    Assumes that filenames are reduced to their basenames already.
     '''
     cname1 = reduce_filename(filename1)
     cname2 = reduce_filename(filename2)
@@ -76,14 +75,6 @@ def similar_filenames(filename1, filename2):
     else:
         return False
 
-def reduce_fileext(filename):
-    ''' Determine file extension from filename and reduce it
-    to a known canonical form
-    '''
-    (base, ext) = os.path.splitext(filename)
-    ext = _EXTENSION_TABLE.get(ext, ext)
-    return base + ext
-
 def reduce_filename(filename):
     ''' Reduce filename to an internal canonical representation
     A canonical representation is a (unicode) string, consisting
@@ -91,6 +82,14 @@ def reduce_filename(filename):
     filename extensions to canonical versions using a lookup table.
     '''
     return u'%s' % reduce_fileext(os.path.basename(filename).lower())
+
+def reduce_fileext(filename):
+    ''' Determine file extension from filename and reduce it
+    to a known canonical form
+    '''
+    (base, ext) = os.path.splitext(filename)
+    ext = _EXTENSION_TABLE.get(ext, ext)
+    return base + ext
 
 def target_exists(destination, filename):
     ''' Determine whether filename exists at destination '''
