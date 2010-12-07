@@ -70,10 +70,11 @@ class InfoStore(object):
     def _translate_metainfomodel_to_metainfo(self, model):
         ''' Make a new MetaInfo object from model '''
     
+        ignored = ['id','name','abspath', '_sa_class_manager', 'discriminator']
         modelklass = model.__class__
         attribs = [key for key in modelklass.__dict__.keys() \
-                       if (not('__' in key) and \
-                               not(key in ['id','name','abspath']))]
+                       if (not(key in ignored) and \
+                               not(key.startswith('__')))]
         metainfo = miclass_for_model(model)(model.name, model.abspath)
         info = dict([(attrib,getattr(model,attrib)) for attrib in attribs])
         metainfo.setInfo(**info)
@@ -89,14 +90,13 @@ class InfoStore(object):
                     return candidate
         return None
 
+    def find_similar_by_name(self, name):
+        ''' Find a MetaInfo in store that is similar according to name '''
+        dupecands = self.get_all_metainfos(name=name)
+        return dupecands
+
 def make_infostore(dsn):
     ''' Returns an infostore, with possibly empty data '''
     metadata = dbmodel.Base.metadata
     infostore = InfoStore(dsn, metadata)
     return infostore
-
-def is_duplicate(store, filename):
-    ''' Check whether MetaInfo for filename is already contained in store '''
-    metainfo = get_metainfo(filename)
-    return store.find_similar(metainfo)
-

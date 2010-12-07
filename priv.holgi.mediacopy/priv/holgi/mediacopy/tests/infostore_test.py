@@ -53,10 +53,9 @@ class InfoStore_Test(DbModel_Test, MediacpTestBase):
             str(imi.image_make))
         eq_(result[0].image_model, 
             str(imi.image_model))
-        eq_(result[0].discriminator, 'image')
 
     @istest
     def find_similar_finds_fixture_for_testpic(self):
         imi = imagemetainfo_from_file(self.testfile)
-        eq_(self.infostore.find_similar(imi), None)
+        eq_(isinstance(self.infostore.find_similar(imi), ImageMetaInfo), True)
         

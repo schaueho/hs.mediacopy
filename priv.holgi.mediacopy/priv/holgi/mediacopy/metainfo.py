@@ -37,13 +37,13 @@ class MetaInfo(object):
     def __str__(self):
         return "%s:%s#%s" % (self.name, self.abspath, self._infodata)
 
-    def is_similar(self, image):
-        ''' Check whether two ImageMetaInfo objects are similar
+    def is_similar(self, other):
+        ''' Check whether two MetaInfo objects are similar
         We check the name as well as the exif information for now.
         '''
-        if (self.name == image.name):
+        if (self.name == other.name):
             selftags = self.keys()
-            othertags = image.keys()
+            othertags = other.keys()
             selftags.sort()
             othertags.sort()
             if not(selftags == othertags):
@@ -51,7 +51,7 @@ class MetaInfo(object):
             for tagname in selftags:
                 othervalue=None
                 try:
-                    othervalue=getattr(image, tagname)
+                    othervalue=getattr(other, tagname)
                 except AttributeError:
                     return False
                 else:
