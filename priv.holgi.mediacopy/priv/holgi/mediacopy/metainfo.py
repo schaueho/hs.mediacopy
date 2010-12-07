@@ -65,8 +65,8 @@ class ImageMetaInfo(MetaInfo):
     
     def __init__(self, name, abspath, **kw):
         super(ImageMetaInfo, self).__init__(name, abspath, **kw)
-        if not('exiftags' in kw.keys()):
-            raise KeyError("Missing exiftags parameter")
-        else:
+        try:
             self.setInfo(**kw['exiftags'])
+        except KeyError:
+            pass
 
