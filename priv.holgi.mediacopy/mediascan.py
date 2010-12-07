@@ -38,7 +38,7 @@ def storeinfo_from_dir(sourcedir, nowrite):
     if nowrite:
         dsn = 'sqlite://'
     else:
-        dsn = 'sqlite:///'+sourcedir+'mediacopy.db'
+        dsn = 'sqlite:///'+os.path.join(sourcedir, 'mediacopy.db')
     infostore = make_infostore(dsn)
 
     callback  = lambda f,g : count_and_store_metainfo(infostore, f, g)
