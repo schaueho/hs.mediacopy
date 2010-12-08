@@ -1,8 +1,9 @@
 #!/usr/bin/python
 
 import os
+import locale
 from optparse import OptionParser
-from priv.holgi.mediacopy.utils import logger
+from priv.holgi.mediacopy.utils import logger, unicodify
 from priv.holgi.mediacopy.types import get_metainfo
 from priv.holgi.mediacopy.infostore import make_infostore
 from priv.holgi.mediacopy.filelib import reduce_filename, \
@@ -11,10 +12,12 @@ from priv.holgi.mediacopy.filelib import reduce_filename, \
 def parse_options():
     usage = "usage: %prog [options] sourcedir"
     parser = OptionParser(usage=usage)
+    parser.add_option('-e', "--encoding", dest="encoding",
+                      action="store_true", help="file name encoding")
+    parser.add_option('-n', "--nowrite", dest="nowrite",
+                      action="store_true", help="don't write database")
     parser.add_option('-v', '--verbose', dest="verbose", action="store_true",
                       help="verbose logging")
-    parser.add_option('-n', "--don't write database", dest="nowrite",
-                      action="store_true", help="verbose logging")
     options, args = parser.parse_args()
     if len(args) != 1:
         parser.error("incorrect number of arguments")
@@ -30,19 +33,20 @@ def is_duplicate(store, filename):
             return result
     return False
     
-def storeinfo_from_dir(sourcedir, nowrite, verbose=False):
+def storeinfo_from_dir(sourcedir, nowrite, verbose=False, encoding='utf-8'):
     
-    def count_and_store_metainfo(store, filename, counts):
+    def count_and_store_metainfo(store, filename, counts, encoding='utf-8'):
         ''' Store metainfos and return the number of seen files '''
         (seen, dupes) = counts
-        basename = reduce_filename(filename)
+        ufilename = unicodify(filename, encoding)
+        basename = reduce_filename(ufilename)
         if verbose:
             logger.info("Scanning %s" % basename)
-        if is_duplicate(store, filename):
+        if is_duplicate(store, ufilename):
             logger.info("Ignoring duplicate %s" % basename)
             dupes = dupes + 1
         else:
-            store.put_metainfo(get_metainfo(filename))
+            store.put_metainfo(get_metainfo(ufilename))
         seen = seen + 1
         return (seen, dupes)
 
@@ -71,7 +75,9 @@ def main():
     except IOError, e:
         parser.print_help()
         raise e
-    infostore= storeinfo_from_dir(args[0], options.nowrite, options.verbose)
+    infostore= storeinfo_from_dir(args[0], options.nowrite,
+                                  options.verbose,
+                                  options.encoding or 'utf-8')
     show_summary_of_current_mis(infostore, options.verbose)
 
 if __name__ == "__main__":

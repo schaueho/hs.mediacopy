@@ -17,7 +17,7 @@ class InfoStore_Test(DbModel_Test, MediacpTestBase):
     @istest
     def get_discriminator_for_ImageMetaInfo(self):
         imi = imagemetainfo_from_file(self.testfile)
-        eq_(self.infostore._get_discriminator(imi), 'image')
+        eq_(self.infostore._get_discriminator(imi), u'image')
 
     @istest
     def put_metainfo_creates_object_in_db(self):
@@ -43,7 +43,7 @@ class InfoStore_Test(DbModel_Test, MediacpTestBase):
     @istest
     def get_all_metainfos_finds_imagemetainfomodeldata_from_fixture(self):
         imi = self.data.ImageMetaInfoModel_Data.cimg2448
-        result = self.infostore.get_all_metainfos(discriminator='image', 
+        result = self.infostore.get_all_metainfos(discriminator=u'image', 
                                                   name=imi.name)
         eq_(len(result), 1)
         eq_(isinstance(result[0], ImageMetaInfo), True)

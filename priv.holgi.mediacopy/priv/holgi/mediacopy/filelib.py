@@ -12,7 +12,7 @@ _EXTENSION_TABLE = {
 
 def copy_newfile(filename, destination, copyunknown=False, 
                  overwrite=False, noaction=False):
-    ''' Copy file to destination only if we think it's new
+    ''' Copy file to destination only if we think it is new
     Returns True on successful copying
     '''
     basename = reduce_filename(filename)
@@ -80,7 +80,7 @@ def reduce_filename(filename):
     solely of downcased letters (insofar possible). We also reduce
     filename extensions to canonical versions using a lookup table.
     '''
-    return u'%s' % reduce_fileext(os.path.basename(filename).lower())
+    return reduce_fileext(os.path.basename(filename).lower())
 
 def reduce_fileext(filename):
     ''' Determine file extension from filename and reduce it

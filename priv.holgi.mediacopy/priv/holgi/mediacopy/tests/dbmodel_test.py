@@ -13,14 +13,15 @@ logging.getLogger('sqlalchemy.engine').setLevel(logging.DEBUG)
 class DbModel_Test(DataTestCase):
 
     # setup a testdb -- we use a sqlite db in memory
-    testdsn = 'sqlite://'
+    testdsn = u'sqlite://'
     
     def setUp(self):
         self._make_dbconn()
         self._make_fixture(self.engine)
         super(DbModel_Test, self).setUp()
         Session = scoped_session(sessionmaker(bind=self.metadata.bind,
-                                              autoflush=True, autocommit=False))
+                                              autoflush=True,
+                                              autocommit=False))
         self.session = Session()
 
     def tearDown(self):

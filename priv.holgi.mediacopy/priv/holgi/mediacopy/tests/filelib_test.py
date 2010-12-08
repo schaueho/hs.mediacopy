@@ -8,7 +8,7 @@ from priv.holgi.mediacopy.filelib import validate_destination, \
 from priv.holgi.mediacopy.tests.mediacp_base_test import MediacpTestBase
 
 class ValidateDestination_Test(MediacpTestBase):
-    ''' Tests ensuring that we're handling a valid destination '''
+    ''' Tests ensuring that we are handling a valid destination '''
     destdir = None
 
     @raises(IOError)
@@ -136,13 +136,13 @@ class SimilarFile_Test(MediacpTestBase):
         self._teardown_testdir()
     
     def case_doesnt_matter_test(self):
-        eq_(similar_filenames('CIMG2448.JPG', 'cimg2448.jpg'), True)
+        eq_(similar_filenames(u'CIMG2448.JPG', u'cimg2448.jpg'), True)
 
     def similar_extensions_test(self):
-        eq_(similar_filenames('CIMG2448.JPG', 'CIMG2448.JPEG'), True)
+        eq_(similar_filenames(u'CIMG2448.JPG', u'CIMG2448.JPEG'), True)
 
     def case_and_similar_extensions_test(self):
-        eq_(similar_filenames('CIMG2448.JPG', 'cimg2448.jpeg'), True)
+        eq_(similar_filenames(u'CIMG2448.JPG', u'cimg2448.jpeg'), True)
 
     @istest
     def find_similar_filenames_finds_matches_in_directories(self):

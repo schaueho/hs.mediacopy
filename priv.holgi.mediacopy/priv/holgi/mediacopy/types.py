@@ -30,7 +30,7 @@ def is_knownfiletype(filename):
 def get_mimetype(filename):
     ''' Determine the (mime) type of a given file '''
     mime = magic.Magic(mime=True)
-    return mime.from_file(filename)
+    return mime.from_file(filename.encode('utf-8'))
 
 def get_metainfo(filename):
     ''' Return a new instance of MetaInfo or a derivative '''

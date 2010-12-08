@@ -2,7 +2,7 @@
 
 import os
 from optparse import OptionParser
-from priv.holgi.mediacopy.utils import logger
+from priv.holgi.mediacopy.utils import logger, unicodify
 from priv.holgi.mediacopy.types import get_metainfo
 from priv.holgi.mediacopy.infostore import make_infostore
 from priv.holgi.mediacopy.filelib import validate_destination, \
@@ -13,8 +13,11 @@ _destination = os.path.join(os.getenv("HOME"), "Bilder", "Fotos")
 def parse_options():
     usage = "usage: %prog [options] sourcedir"
     parser = OptionParser(usage=usage)
-    parser.add_option('-v', '--verbose', dest="verbose", action="store_true",
-                      help="verbose logging")
+    parser.add_option('-d', '--destination', dest="destination", 
+                      type="string", default=_destination, 
+                      help="set destination (default: %s)" % _destination)
+    parser.add_option('-e', "--encoding", dest="encoding",
+                      action="store_true", help="file name encoding")
     parser.add_option('-f', '--force', dest="force", action="store_true",
                       help="force overwrite")
     parser.add_option('-n', '--noaction', dest="noaction", action="store_true",
@@ -22,9 +25,8 @@ def parse_options():
     parser.add_option('-u', '--unknown', dest="copyunknown", 
                       action="store_true",
                       help="copy unknown filetypes as well")
-    parser.add_option('-d', '--destination', dest="destination", 
-                      type="string", default=_destination, 
-                      help="set destination (default: %s)" % _destination)
+    parser.add_option('-v', '--verbose', dest="verbose", action="store_true",
+                      help="verbose logging")
     options, args = parser.parse_args()
     if len(args) != 1:
         parser.error("incorrect number of arguments")
@@ -51,6 +53,7 @@ def handle_copy(filename, store, options, result):
         store.put_metainfo(duplicate or get_metainfo(filename))
         return copycount 
 
+    filename = unicodify(filename, options.encoding or 'utf-8')
     filecount = filecount + 1
     duplicate = mi_if_duplicate(store, filename)
     if duplicate:

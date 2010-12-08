@@ -10,7 +10,7 @@ class MediacpTestBase(TestCase):
     def _setup_testdir(self):
         ''' Generate a new temporary directory as a target for copying '''
         newdir=mkdtemp('','mct',gettempdir())
-        self.destdir=newdir
+        self.destdir=unicode(newdir)
 
     def _teardown_testdir(self):
         ''' Remove the temporary directory as a target for copying '''
@@ -20,8 +20,8 @@ class MediacpTestBase(TestCase):
     def _setup_testpic(self):
         ''' Provide the test picture '''
         package_dir = path.dirname(__file__)
-        self.testfilename = 'CIMG2448.JPG'
-        self.testfile = path.join(package_dir, self.testfilename)
+        self.testfilename = u'CIMG2448.JPG'
+        self.testfile = unicode(path.join(package_dir, self.testfilename))
 
     def _teardown_testpic(self):
         ''' Remove a possible copy of the test picture '''
@@ -30,4 +30,4 @@ class MediacpTestBase(TestCase):
 
     @property
     def _copiedfilepath(self):
-        return path.join(self.destdir, self.testfilename)
+        return unicode(path.join(self.destdir, self.testfilename))
