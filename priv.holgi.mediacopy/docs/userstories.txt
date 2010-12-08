@@ -6,7 +6,7 @@
 |     |                                                         |         |
 |     |                                                         |         |
 +-----+---------------------------------------------------------+---------+
-|2    |Als Kamerabenutzer erwarte ich, dass Bilder von meiner   |in Arbeit|
+|2    |Als Kamerabenutzer erwarte ich, dass Bilder von meiner   |erledigt |
 |     |Kamera, die ich schon kopiert habe, nicht noch einmal    |         |
 |     |kopiert werden.                                          |         |
 |     |                                                         |         |
