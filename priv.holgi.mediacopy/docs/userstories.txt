@@ -1,40 +1,42 @@
 +-----+---------------------------------------------------------+---------+
-|1    |Als Kamerabenutzer möchte ich neue Bilder von meiner     |erledigt |
-|     |Kamera auf ein bekanntes Verzeichnis auf meinen Rechner  |         |
-|     |kopieren.                                                |         |
-|     |                                                         |         |
-|     |                                                         |         |
-|     |                                                         |         |
-+-----+---------------------------------------------------------+---------+
-|2    |Als Kamerabenutzer erwarte ich, dass Bilder von meiner   |erledigt |
-|     |Kamera, die ich schon kopiert habe, nicht noch einmal    |         |
-|     |kopiert werden.                                          |         |
-|     |                                                         |         |
-|     |                                                         |         |
-|     |                                                         |         |
-+-----+---------------------------------------------------------+---------+
-|3    |Als Kamerabenutzer kann ich explizit angeben, dass ich   |erledigt |
-|     |auch Doubletten erneut kopieren will.                    |         |
-|     |                                                         |         |
-|     |                                                         |         |
-|     |                                                         |         |
-+-----+---------------------------------------------------------+---------+
-|4    |Als Kamerabenutzer kann ich das Zielverzeichnis explizit |erledigt |
-|     |angeben.                                                 |         |
-|     |                                                         |         |
-|     |                                                         |         |
-|     |                                                         |         |
-+-----+---------------------------------------------------------+---------+
-|5    |Als Kamerabenutzer erwarte ich, dass ich Bilder aus dem  |         |
-|     |Zielverzeichnis entfernen/kopieren kann, ohne dass es    |         |
-|     |beim erneuten Kopieren der Originalbilder zu Doubletten  |         |
-|     |kommt.                                                   |         |
+|1    |As a camerua user I want to copy images from my mounted  |done     |
+|     |camera media to some directory on my computer.           |         |
 |     |                                                         |         |
 |     |                                                         |         |
 |     |                                                         |         |
 |     |                                                         |         |
 +-----+---------------------------------------------------------+---------+
+|2    |As a camera user I expect that images on my mounted      |done     |
+|     |camera media don't get copied a second time. I expect    |         |
+|     |that filename as well as exif information are considered |         |
+|     |to detect duplicates.                                    |         |
 |     |                                                         |         |
+|     |                                                         |         |
++-----+---------------------------------------------------------+---------+
+|3    |As a user I can specify that I do want to copy duplicate |done     |
+|     |media, too.                                              |         |
+|     |                                                         |         |
+|     |                                                         |         |
+|     |                                                         |         |
++-----+---------------------------------------------------------+---------+
+|4    |As a user I can specify which directory to copy media to.|done     |
+|     |                                                         |         |
+|     |                                                         |         |
+|     |                                                         |         |
+|     |                                                         |         |
++-----+---------------------------------------------------------+---------+
+|5    |As a user I want to (re)move media from the destination  |done     |
+|     |directory without interfering with the duplication       |         |
+|     |detection. As a user I expect that I can update the info |         |
+|     |state about my destination directory.                    |         |
+|     |                                                         |         |
+|     |                                                         |         |
+|     |                                                         |         |
+|     |                                                         |         |
++-----+---------------------------------------------------------+---------+
+|6    |As a user I can specify a destination where the state    |open     |
+|     |information is stored that can be independent from the   |         |
+|     |destination of any copy action.                          |         |
 +-----+---------------------------------------------------------+---------+
 |     |                                                         |         |
 +-----+---------------------------------------------------------+---------+
