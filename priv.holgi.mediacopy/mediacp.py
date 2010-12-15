@@ -16,6 +16,9 @@ def parse_options():
     parser.add_option('-d', '--destination', dest="destination", 
                       type="string", default=_destination, 
                       help="set destination (default: %s)" % _destination)
+    parser.add_option('-D', '--database', dest="database", 
+                      type="string", default=_destination, 
+                      help="location (path without filename) of database")
     parser.add_option('-e', "--encoding", dest="encoding",
                       action="store_true", help="file name encoding")
     parser.add_option('-f', '--force', dest="force", action="store_true",
@@ -47,10 +50,15 @@ def handle_copy(filename, store, options, result):
 
     def copy_and_store(filename, store, options, copycount, duplicate=None):
         ''' Copy file to destination and store metainfo '''
-        copy_file(filename, options.destination,
-                  options.force, options.noaction)
+        if options.noaction:
+            logger.info("Would copy %s" % filename)
+        else:
+            if options.verbose:
+                logger.info("Would copy %s" % filename)
+            copy_file(filename, options.destination,
+                      options.force, options.noaction)
+            store.put_metainfo(duplicate or get_metainfo(filename))
         copycount = copycount + 1
-        store.put_metainfo(duplicate or get_metainfo(filename))
         return copycount 
 
     filename = unicodify(filename, options.encoding or 'utf-8')
@@ -67,6 +75,9 @@ def handle_copy(filename, store, options, result):
         copycount = copy_and_store(filename, store, options, copycount)
     return (filecount, copycount, dupecount)
 
+def make_dsn(dblocation):
+    dsn = 'sqlite:///'+os.path.join(dblocation, 'mediacopy.db')
+    return dsn
 
 def main():
     parser, options, args = parse_options()
@@ -76,7 +87,7 @@ def main():
         parser.print_help()
         raise e
 
-    dsn = 'sqlite:///'+os.path.join(options.destination, 'mediacopy.db')
+    dsn = make_dsn(options.database or options.destination)
     infostore = make_infostore(dsn)
     result = (0,0,0)
     callback = lambda f,g: handle_copy(f, infostore, options, g)

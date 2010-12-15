@@ -20,7 +20,8 @@ Options:
   -h, --help            show this help message and exit
   -d DESTINATION, --destination=DESTINATION
                         set destination (default: /home/schauer/Bilder/Fotos)
-  -e, --encoding        file name encoding
+  -D DATABASE, --database=DATABASE
+                        location (path without filename) of database
   -f, --force           force overwrite
   -n, --noaction        don't perform the action
   -u, --unknown         copy unknown filetypes as well
@@ -36,7 +37,8 @@ Usage: mediascan.py [options] sourcedir
 
 Options:
   -h, --help      show this help message and exit
-  -e, --encoding  file name encoding
+  -D DATABASE, --database=DATABASE
+                        location (path without filename) of database
   -n, --nowrite   don't write database
   -v, --verbose   verbose logging
 

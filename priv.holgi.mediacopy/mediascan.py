@@ -12,6 +12,9 @@ from priv.holgi.mediacopy.filelib import reduce_filename, \
 def parse_options():
     usage = "usage: %prog [options] sourcedir"
     parser = OptionParser(usage=usage)
+    parser.add_option('-D', '--database', dest="database", 
+                      type="string", 
+                      help="location (path without filename) of database")
     parser.add_option('-e', "--encoding", dest="encoding",
                       action="store_true", help="file name encoding")
     parser.add_option('-n', "--nowrite", dest="nowrite",
@@ -32,8 +35,13 @@ def is_duplicate(store, filename):
             result = store.find_similar(metainfo)
             return result
     return False
+
+def make_dsn(dblocation):
+    dsn = 'sqlite:///'+os.path.join(dblocation, 'mediacopy.db')
+    return dsn
     
-def storeinfo_from_dir(sourcedir, nowrite, verbose=False, encoding='utf-8'):
+def storeinfo_from_dir(sourcedir, dblocation, nowrite, 
+                       verbose=False, encoding='utf-8'):
     
     def count_and_store_metainfo(store, filename, counts, encoding='utf-8'):
         ''' Store metainfos and return the number of seen files '''
@@ -53,7 +61,7 @@ def storeinfo_from_dir(sourcedir, nowrite, verbose=False, encoding='utf-8'):
     if nowrite:
         dsn = 'sqlite://'
     else:
-        dsn = 'sqlite:///'+os.path.join(sourcedir, 'mediacopy.db')
+        dsn = 'sqlite:///'+os.path.join(dblocation, 'mediacopy.db')
     infostore = make_infostore(dsn)
 
     callback  = lambda f,g : count_and_store_metainfo(infostore, f, g)
@@ -68,6 +76,7 @@ def show_summary_of_current_mis(infostore, verbose):
             logger.info("Looking at: %s" % mi.name)
     print "Stored metainfo items: %s" % len(current_mis)
 
+
 def main():
     parser, options, args = parse_options()
     try:
@@ -75,7 +84,8 @@ def main():
     except IOError, e:
         parser.print_help()
         raise e
-    infostore= storeinfo_from_dir(args[0], options.nowrite,
+    infostore= storeinfo_from_dir(args[0], options.database or args[0],
+                                  options.nowrite,
                                   options.verbose,
                                   options.encoding or 'utf-8')
     show_summary_of_current_mis(infostore, options.verbose)

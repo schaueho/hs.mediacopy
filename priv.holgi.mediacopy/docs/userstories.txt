@@ -34,7 +34,7 @@
 |     |                                                         |         |
 |     |                                                         |         |
 +-----+---------------------------------------------------------+---------+
-|6    |As a user I can specify a destination where the state    |open     |
+|6    |As a user I can specify a destination where the state    |done     |
 |     |information is stored that can be independent from the   |         |
 |     |destination of any copy action.                          |         |
 +-----+---------------------------------------------------------+---------+
