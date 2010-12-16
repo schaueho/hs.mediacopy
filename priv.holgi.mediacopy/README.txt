@@ -44,3 +44,30 @@ Options:
 
 mediascan will scan the mediafiles in sourcedir and record metadata
 abouth them into a database with the name mediacp.db in sourcedir.
+
+Installation
+============
+mediacopy comes as a python package ("egg"), which means that it is
+intended to be installed via easy_install, cf. 
+http://peak.telecommunity.com/DevCenter/EasyInstall
+
+However, as of today, mediacopy is not distributed via
+pypi.python.org. There is not even a so called 'source distribution'
+package available -- besides the mercurial repository on
+https://bitbucket.org/schaueho/mediacopy/. Hence, installation goes
+currently works like this:
+
+1. Install mercurial (hg)
+2. Clone the bitbucket repository
+   hg clone http://bitbucket.org/schaueho/mediacopy
+3. Go to the directory priv.holgi.mediacopy
+4. Issue a setup command:
+   python setup.py install
+
+This will /not/ download all required packages. In particular, it will
+not download/install EXIF.py, which is available as a separate
+download from http://sourceforge.net/projects/exif-py/ (it's neither
+available as an egg nor as a source distribution of a python package
+unfortunately). You must install EXIF.py into a place where your
+python-installation can find it.
+
