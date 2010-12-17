@@ -74,7 +74,7 @@ def copy_and_store(filename, destination, store, options, duplicate=False):
             logger.info("Would copy %s" % filename)
         result = copy_file(filename, destination,
                            options.force, options.noaction, 
-                           options.unknown)
+                           options.copyunknown)
         if not(duplicate):
             store.put_metainfo(get_metainfo(filename))
     return result
