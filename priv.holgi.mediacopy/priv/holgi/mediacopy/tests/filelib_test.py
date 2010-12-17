@@ -133,7 +133,7 @@ class CopyFile_Test(MediacpTestBase):
         eq_(copy_newfile(__file__, self.destdir), False)
 
     @istest
-    def copy_newfile_doesntcopy_unknownfiles_unless_forced(self):
+    def copy_newfile_copies_unknownfiles_if_forced(self):
         # we try to copy ourself!
         result = False
         assert not(is_knownfiletype(__file__))

@@ -18,6 +18,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
+import os
 import logging
 
 # create logger
@@ -36,3 +37,7 @@ def unicodify(string, encoding='utf-8'):
         except UnicodeDecodeError:
             result = string.decode(encoding)
     return result
+
+def make_dsn(dblocation):
+    dsn = 'sqlite:///'+os.path.join(dblocation, 'mediacopy.db')
+    return dsn

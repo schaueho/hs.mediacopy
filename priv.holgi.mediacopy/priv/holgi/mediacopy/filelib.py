@@ -45,13 +45,16 @@ def copy_newfile(filename, destination, copyunknown=False,
                         os.path.join(destination, basename))
         return False
     else:
-        return copy_file(filename, destination, overwrite, noaction)
+        return copy_file(filename, destination, overwrite, noaction, copyunknown)
 
-def copy_file(filename, destination, overwrite=False, noaction=False):
+def copy_file(filename, destination, overwrite=False, noaction=False, copyunknown=False):
     ''' Copy file to destination 
     Returns True on successful copying.
     '''
     basename = os.path.basename(filename)
+    if not(is_knownfiletype(filename)) and not(copyunknown):
+        logger.info("Unknown file type, ignoring %s" % filename)
+        return False
     if target_exists(destination, basename) and not(overwrite):
         logger.info("Not overwriting existing target file %s" % \
                         os.path.join(destination, basename))

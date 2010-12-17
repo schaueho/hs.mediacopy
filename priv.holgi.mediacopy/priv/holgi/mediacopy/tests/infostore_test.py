@@ -34,6 +34,9 @@ class InfoStore_Test(DbModel_Test, MediacpTestBase):
         self._setup_testpic()
         super(DbModel_Test, self).setUp()
 
+    def tearDown(self):
+        super(DbModel_Test, self).tearDown()
+
     @istest
     def get_discriminator_for_ImageMetaInfo(self):
         imi = imagemetainfo_from_file(self.testfile)

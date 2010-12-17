@@ -27,6 +27,9 @@ class MediacpTestBase(TestCase):
     Serves basically as some kind of a zope.testing layer, w/o the benefits
     of a real layer.
     '''
+    def setUp(self):
+        super(MediacpTestBase, self).setUp()
+
     def _setup_testdir(self):
         ''' Generate a new temporary directory as a target for copying '''
         newdir=mkdtemp('','mct',gettempdir())

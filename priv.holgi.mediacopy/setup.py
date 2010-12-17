@@ -38,8 +38,8 @@ setup(name='priv.holgi.mediacopy',
       tests_require=['Nose','fixture[decorators]'],
       entry_points={
         'console_scripts': [
-            'mediacp=mediacp:main',
-            'mediascan=mediascan:main'
+            'mediacp=priv.holgi.mediacopy.mediacp:main',
+            'mediascan=priv.holgi.mediacopy.mediascan:main'
             ],
         }
       )

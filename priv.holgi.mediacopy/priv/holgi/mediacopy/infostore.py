@@ -120,3 +120,5 @@ def make_infostore(dsn):
     metadata = dbmodel.Base.metadata
     infostore = InfoStore(dsn, metadata)
     return infostore
+
+
