@@ -5,7 +5,7 @@ version = '0.1'
 
 setup(name='priv.holgi.mediacopy',
       version=version,
-      description="copy media non-redundantly",
+      description="copy media files, avoiding duplicates",
       long_description=open("README.txt").read() + "\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
       # Get more strings from
@@ -24,7 +24,7 @@ setup(name='priv.holgi.mediacopy',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['priv', 'priv.holgi'],
       include_package_data=True,
-      zip_safe=False,
+      zip_safe=True,
       install_requires=[
           'setuptools',
           # -*- Extra requirements: -*-
@@ -36,7 +36,10 @@ setup(name='priv.holgi.mediacopy',
       ],
       test_suite='nose.collector',
       tests_require=['Nose','fixture[decorators]'],
-      entry_points="""
-      # -*- Entry points: -*-
-      """,
+      entry_points={
+        'console_scripts': [
+            'mediacp=mediacp:main',
+            'mediascan=mediascan:main'
+            ],
+        }
       )
