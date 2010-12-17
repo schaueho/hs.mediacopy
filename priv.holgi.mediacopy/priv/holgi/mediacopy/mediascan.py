@@ -22,12 +22,10 @@
 import os
 import sys
 from optparse import OptionParser
-from priv.holgi.mediacopy.utils import logger, unicodify
-from priv.holgi.mediacopy.types import get_metainfo
-from priv.holgi.mediacopy.infostore import make_infostore, find_metainfo
-from priv.holgi.mediacopy.applogic import find_metainfo, store_metainfo
-from priv.holgi.mediacopy.filelib import reduce_filename, \
-    validate_destination, walktree, print_filename
+from priv.holgi.mediacopy.utils import logger, unicodify, make_dsn
+from priv.holgi.mediacopy.infostore import make_infostore
+from priv.holgi.mediacopy.applogic import store_metainfo_directory
+from priv.holgi.mediacopy.filelib import validate_destination
 
 _default_encoding=sys.getfilesystemencoding() or 'utf-8'
 
@@ -64,9 +62,9 @@ def main():
         parser.print_help()
         raise e
 
-    dsn = make_dsn((options.nowrite and '') or options.destination)
+    dsn = make_dsn((options.nowrite and '') or args[0])
     infostore = make_infostore(dsn)
-    (seen, dupes) = storeinfo_from_dir(infostore, args[0], options, (0,0))
+    (seen, dupes) = store_metainfo_directory(infostore, args[0], options, (0,0))
     show_summary_of_current_mis(infostore, options)
 
 if __name__ == "__main__":
