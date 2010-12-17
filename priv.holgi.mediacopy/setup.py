@@ -35,7 +35,7 @@ setup(name='priv.holgi.mediacopy',
       dependency_links = [
       ],
       test_suite='nose.collector',
-      test_requires=['Nose','fixture[decorators]'],
+      tests_require=['Nose','fixture[decorators]'],
       entry_points="""
       # -*- Entry points: -*-
       """,
