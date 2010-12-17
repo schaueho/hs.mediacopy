@@ -24,10 +24,10 @@ from fixture import DataSet
 testpath = os.path.dirname(__file__) 
 
 class ImageMetaInfoModel_Data(DataSet):
-    class cimg2448:
-        name = u'cimg2448.jpg'
-        abspath = unicode(os.path.join(testpath, u'CIMG2448.JPG'))
-        exif_datetimeoriginal = u'2010:02:16 14:21:25'
+    class cimg2555:
+        name = u'cimg2555.jpg'
+        abspath = unicode(os.path.join(testpath, u'CIMG2555.JPG'))
+        exif_datetimeoriginal = u'2010:03:16 14:21:25'
         image_model = u'EX-P700'
         image_make = u'CASIO COMPUTER CO.,LTD '
 

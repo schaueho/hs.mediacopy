@@ -65,12 +65,12 @@ class DbModel_Test(DataTestCase):
 
     @istest
     def fixture_generates_imagemetainfo(self):
-        result = self.session.query(dbmodel.ImageMetaInfoModel).filter_by(name=self.data.ImageMetaInfoModel_Data.cimg2448.name).all()
+        result = self.session.query(dbmodel.ImageMetaInfoModel).filter_by(name=self.data.ImageMetaInfoModel_Data.cimg2555.name).all()
         eq_(len(result), 1)
 
     @istest
     def fixture_generates_imagemetainfo_with_expected_attributes(self):
-        result = self.session.query(dbmodel.ImageMetaInfoModel).filter_by(name=self.data.ImageMetaInfoModel_Data.cimg2448.name).one()
+        result = self.session.query(dbmodel.ImageMetaInfoModel).filter_by(name=self.data.ImageMetaInfoModel_Data.cimg2555.name).one()
         assert (result.name and result.abspath and \
                 result.exif_datetimeoriginal and \
                 result.image_model and result.image_make)

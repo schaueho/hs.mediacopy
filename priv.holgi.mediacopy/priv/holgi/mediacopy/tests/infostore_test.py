@@ -62,20 +62,21 @@ class InfoStore_Test(DbModel_Test, MediacpTestBase):
 
     @istest
     def get_all_metainfos_finds_imagemetainfomodeldata_from_fixture(self):
-        imi = self.data.ImageMetaInfoModel_Data.cimg2448
+        imi = self.data.ImageMetaInfoModel_Data.cimg2555
         result = self.infostore.get_all_metainfos(discriminator=u'image', 
                                                   name=imi.name)
         eq_(len(result), 1)
         eq_(isinstance(result[0], ImageMetaInfo), True)
         eq_(result[0].exif_datetimeoriginal, 
-            str(self.data.ImageMetaInfoModel_Data.cimg2448.exif_datetimeoriginal))
+            str(self.data.ImageMetaInfoModel_Data.cimg2555.exif_datetimeoriginal))
         eq_(result[0].image_make, 
             str(imi.image_make))
         eq_(result[0].image_model, 
             str(imi.image_model))
 
     @istest
-    def find_similar_finds_fixture_for_testpic(self):
+    def find_similar_finds_result_after_put(self):
         imi = imagemetainfo_from_file(self.testfile)
+        self.infostore.put_metainfo(imi)
         eq_(isinstance(self.infostore.find_similar(imi), ImageMetaInfo), True)
         
