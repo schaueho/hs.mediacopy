@@ -56,7 +56,7 @@ class Applogic_Test(MediacpTestBase):
 
     @istest
     def copydir_copies_file(self):
-        options = OptionsStub(encoding='utf-8', verbose=None, noaction=None, force=None, unknown=None, destination=self.destdir)
+        options = OptionsStub(encoding='utf-8', verbose=None, noaction=None, force=None, copyunknown=None, destination=self.destdir)
         (seen, copied, dupes) = mediacopy_directory(self.sourcedir, self.destdir, self.infostore, options, (0,0,0))
         eq_((seen > 1), True)
         eq_(dupes, 0)
@@ -66,7 +66,7 @@ class Applogic_Test(MediacpTestBase):
 
     @istest
     def copydir_adds_new_metainfo(self):
-        options = OptionsStub(encoding='utf-8', verbose=None, noaction=None, force=None, unknown=None, destination=self.destdir)
+        options = OptionsStub(encoding='utf-8', verbose=None, noaction=None, force=None, copyunknown=None, destination=self.destdir)
         eq_(len(self.infostore.get_all_metainfos()), 0)
         (seen, copied, dupes) = mediacopy_directory(self.sourcedir, self.destdir, self.infostore, options, (0,0,0))
         eq_((seen > 1), True)
