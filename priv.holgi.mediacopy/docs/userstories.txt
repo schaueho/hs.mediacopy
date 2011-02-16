@@ -1,5 +1,14 @@
 +-----+---------------------------------------------------------+---------+
-|1    |As a camerua user I want to copy images from my mounted  |done     |
+|0    |As a user I want a command line interface just like cp,  |open     |
+|     |i.e. I can specify either a directory to copy or a set of|         |
+|     |files. Last argument always specifies a destination where|         |
+|     |to copy the media files to.                              |         |
+|     |                                                         |         |
+|     |                                                         |         |
+|     |                                                         |         |
+|     |                                                         |         |
++-----+---------------------------------------------------------+---------+
+|1    |As a camera user I want to copy images from my mounted   |done     |
 |     |camera media to some directory on my computer.           |         |
 |     |                                                         |         |
 |     |                                                         |         |
@@ -46,3 +55,8 @@
 +-----+---------------------------------------------------------+---------+
 |     |                                                         |         |
 +-----+---------------------------------------------------------+---------+
+
+;Local Variables:
+;mode:text
+;eval: (when (fboundp 'table-recognize) (table-recognize))
+;End:

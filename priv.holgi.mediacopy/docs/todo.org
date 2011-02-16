@@ -1,0 +1,9 @@
+* Implementation
+** TODO CLI should mimic cp argument behaviour
+** TODO Replace EXIF.py dependency with a faster alternative
+** TODO Implement handling of audio files
+
+* General tasks
+** TODO Upload to pypi
+** TODO Announce availability
+
