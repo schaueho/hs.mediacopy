@@ -32,14 +32,11 @@ _destination = os.path.join(os.getenv("HOME"), "Bilder", "Fotos")
 _default_encoding=sys.getfilesystemencoding() or 'utf-8'
 
 def parse_options():
-    usage = "usage: %prog [options] sourcedir"
+    usage = "usage: %prog [options] sourcedir destinationdir"
     parser = OptionParser(usage=usage)
-    parser.add_option('-d', '--destination', dest="destination", 
-                      type="string", default=_destination, 
-                      help="set destination (default: %s)" % _destination)
     parser.add_option('-D', '--database', dest="database", 
                       type="string", default=_destination, 
-                      help="location (path without filename) of database")
+                      help="(location of) destination database holding metadata")
     parser.add_option('-e', "--encoding", dest="encoding",
                       type="string", default=_default_encoding,
                       help="file name encoding")
@@ -53,14 +50,14 @@ def parse_options():
     parser.add_option('-v', '--verbose', dest="verbose", action="store_true",
                       help="verbose logging")
     options, args = parser.parse_args()
-    if len(args) != 1:
+    if len(args) != 2:
         parser.error("incorrect number of arguments")
     return [parser, options, args]
 
 def main():
     parser, options, args = parse_options()
     try:
-        validate_destination(options.destination)
+        validate_destination(args[1])
     except IOError, e:
         parser.print_help()
         raise e
@@ -68,7 +65,7 @@ def main():
     result = (0,0,0)
     dsn = make_dsn(options.database or options.destination)
     infostore = make_infostore(dsn)
-    (seen, copied, dupes) = mediacopy_directory(args[0], options.destination, infostore, options, result)
+    (seen, copied, dupes) = mediacopy_directory(args[0], args[1], infostore, options, result)
     print "Saw %s files, copied %s files and ignored %s duplicates" % (seen, copied, dupes)
 
 if __name__ == "__main__":
