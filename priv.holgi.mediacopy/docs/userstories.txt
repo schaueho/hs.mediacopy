@@ -1,6 +1,6 @@
 +-----+---------------------------------------------------------+---------+
-|0    |As a user I want a command line interface just like cp,  |open     |
-|     |i.e. I can specify either a directory to copy or a set of|         |
+|0    |As a user I want a command line interface just like cp,  |in       |
+|     |i.e. I can specify either a directory to copy or a set of|progress |
 |     |files. Last argument always specifies a destination where|         |
 |     |to copy the media files to.                              |         |
 |     |                                                         |         |
