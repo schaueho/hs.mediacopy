@@ -63,7 +63,7 @@ def main():
         raise e
 
     result = (0,0,0)
-    dsn = make_dsn(options.database or options.destination)
+    dsn = make_dsn(options.database or args[1])
     infostore = make_infostore(dsn)
     (seen, copied, dupes) = mediacopy_directory(args[0], args[1], infostore, options, result)
     print "Saw %s files, copied %s files and ignored %s duplicates" % (seen, copied, dupes)

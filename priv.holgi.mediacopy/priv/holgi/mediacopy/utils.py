@@ -39,7 +39,7 @@ def unicodify(string, encoding='utf-8'):
     return result
 
 def make_dsn(dblocation):
-    if (os.path.exists(dest) and os.path.isdir(dest)):
+    if (os.path.exists(dblocation) and os.path.isdir(dblocation)):
         dsn = 'sqlite:///'+os.path.join(dblocation, 'mediacopy.db')
     else:
         if (os.path.exists(dblocation) and os.path.isfile(dblocation)):
