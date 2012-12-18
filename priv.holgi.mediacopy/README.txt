@@ -14,12 +14,10 @@ already existing files at some destination.
 
 mediacp.py has the following synopsis:
 
-Usage: mediacp.py [options] sourcedir
+Usage: mediacp.py [options] sourcedir destinationdir
 
 Options:
   -h, --help            show this help message and exit
-  -d DESTINATION, --destination=DESTINATION
-                        set destination (default: /home/schauer/Bilder/Fotos)
   -D DATABASE, --database=DATABASE
                         location (path without filename) of database
   -f, --force           force overwrite
@@ -28,8 +26,7 @@ Options:
   -v, --verbose         verbose logging
 
 As you can see, mediacp.py expects a source directory which it will
-recurse into and, optionally, a destination directory where to copy
-the media files to.
+recurse into and a destination directory to copy the media files to.
 
 mediascan.py has the following synopsis:
 
