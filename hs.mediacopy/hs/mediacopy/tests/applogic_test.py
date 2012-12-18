@@ -20,11 +20,11 @@
 
 import os
 from nose.tools import raises, istest, eq_
-from priv.holgi.mediacopy.utils import make_dsn, logger
-from priv.holgi.mediacopy.infostore import make_infostore
-from priv.holgi.mediacopy.applogic import mediacopy_directory, \
+from hs.mediacopy.utils import make_dsn, logger
+from hs.mediacopy.infostore import make_infostore
+from hs.mediacopy.applogic import mediacopy_directory, \
     store_metainfo_directory
-from priv.holgi.mediacopy.tests.mediacp_base_test import MediacpTestBase
+from hs.mediacopy.tests.mediacp_base_test import MediacpTestBase
 
 class OptionsStub(object):
     def __init__(self, **kw):

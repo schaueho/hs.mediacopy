@@ -20,8 +20,8 @@
 
 import os
 import EXIF as exif
-from priv.holgi.mediacopy.utils import logger
-from priv.holgi.mediacopy.metainfo import ImageMetaInfo
+from hs.mediacopy.utils import logger
+from hs.mediacopy.metainfo import ImageMetaInfo
 
 EXIFTAGS = [
     'EXIF DateTimeOriginal',

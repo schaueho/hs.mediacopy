@@ -3,7 +3,7 @@ import os
 
 version = '0.1'
 
-setup(name='priv.holgi.mediacopy',
+setup(name='hs.mediacopy',
       version=version,
       description="copy media files, avoiding duplicates",
       long_description=open("README.txt").read() + "\n" +
@@ -22,7 +22,7 @@ setup(name='priv.holgi.mediacopy',
       url='http://bitbucket.org/schaueho/mediacopy',
       license='GPL',
       packages=find_packages(exclude=['ez_setup']),
-      namespace_packages=['priv', 'priv.holgi'],
+      namespace_packages=['hs'],
       include_package_data=True,
       zip_safe=True,
       install_requires=[
@@ -38,8 +38,8 @@ setup(name='priv.holgi.mediacopy',
       tests_require=['Nose','fixture[decorators]'],
       entry_points={
         'console_scripts': [
-            'mediacp=priv.holgi.mediacopy.mediacp:main',
-            'mediascan=priv.holgi.mediacopy.mediascan:main'
+            'mediacp=hs.mediacopy.mediacp:main',
+            'mediascan=hs.mediacopy.mediascan:main'
             ],
         }
       )

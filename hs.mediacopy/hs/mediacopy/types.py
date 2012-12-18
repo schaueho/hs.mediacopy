@@ -20,11 +20,11 @@
 
 
 import magic
-from priv.holgi.mediacopy.metainfo import MetaInfo, \
+from hs.mediacopy.metainfo import MetaInfo, \
     ImageMetaInfo
-from priv.holgi.mediacopy.dbmodel import MetaInfoModel, \
+from hs.mediacopy.dbmodel import MetaInfoModel, \
     ImageMetaInfoModel
-from priv.holgi.mediacopy.piccp import imagemetainfo_from_file
+from hs.mediacopy.piccp import imagemetainfo_from_file
 
 KNOWN_FILETYPES = [
     'image/jpeg',

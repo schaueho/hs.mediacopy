@@ -19,11 +19,11 @@
 '''
 
 from nose.tools import istest, eq_
-from priv.holgi.mediacopy.tests.mediacp_base_test import MediacpTestBase
-from priv.holgi.mediacopy.tests.dbmodel_test import DbModel_Test
-from priv.holgi.mediacopy.infostore import make_infostore
-from priv.holgi.mediacopy.piccp import ImageMetaInfo, imagemetainfo_from_file
-from priv.holgi.mediacopy.dbmodel import ImageMetaInfoModel
+from hs.mediacopy.tests.mediacp_base_test import MediacpTestBase
+from hs.mediacopy.tests.dbmodel_test import DbModel_Test
+from hs.mediacopy.infostore import make_infostore
+from hs.mediacopy.piccp import ImageMetaInfo, imagemetainfo_from_file
+from hs.mediacopy.dbmodel import ImageMetaInfoModel
 
 class InfoStore_Test(DbModel_Test, MediacpTestBase):
     

@@ -20,9 +20,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-from priv.holgi.mediacopy.types import get_metainfo
-from priv.holgi.mediacopy.utils import logger, unicodify
-from priv.holgi.mediacopy.filelib import reduce_filename, \
+from hs.mediacopy.types import get_metainfo
+from hs.mediacopy.utils import logger, unicodify
+from hs.mediacopy.filelib import reduce_filename, \
     copy_file, walktree
 
 def mediacopy_directory(sourcedir, destination, store, options, result):

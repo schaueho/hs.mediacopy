@@ -23,9 +23,9 @@ from sqlalchemy import *
 from sqlalchemy.orm import *
 from nose.tools import eq_, istest
 from fixture import DataTestCase, SQLAlchemyFixture
-from priv.holgi.mediacopy.utils import logger
-from priv.holgi.mediacopy import dbmodel
-from priv.holgi.mediacopy.tests.dbmodel_fixture import ImageMetaInfoModel_Data
+from hs.mediacopy.utils import logger
+from hs.mediacopy import dbmodel
+from hs.mediacopy.tests.dbmodel_fixture import ImageMetaInfoModel_Data
 
 logging.basicConfig()
 logging.getLogger('sqlalchemy.engine').setLevel(logging.DEBUG)

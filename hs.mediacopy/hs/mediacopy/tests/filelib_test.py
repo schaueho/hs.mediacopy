@@ -22,10 +22,10 @@ from os import access, chmod, path, remove, rmdir, stat, R_OK
 from stat import S_IWUSR, S_IXUSR
 from tempfile import mkstemp
 from nose.tools import raises, istest, eq_
-from priv.holgi.mediacopy.filelib import validate_destination, \
+from hs.mediacopy.filelib import validate_destination, \
     copy_file, copy_newfile, is_knownfiletype, \
     similar_filenames, find_similar_filenames
-from priv.holgi.mediacopy.tests.mediacp_base_test import MediacpTestBase
+from hs.mediacopy.tests.mediacp_base_test import MediacpTestBase
 
 class ValidateDestination_Test(MediacpTestBase):
     ''' Tests ensuring that we are handling a valid destination '''

@@ -21,8 +21,8 @@
 import os
 import shutil
 from stat import S_ISDIR, S_ISREG, ST_MODE
-from priv.holgi.mediacopy.utils import logger
-from priv.holgi.mediacopy.types import is_knownfiletype
+from hs.mediacopy.utils import logger
+from hs.mediacopy.types import is_knownfiletype
 
 _EXTENSION_TABLE = {
     '.jpg' : '.jpg',

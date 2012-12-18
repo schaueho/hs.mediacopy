@@ -22,10 +22,10 @@
 import os
 import sys
 from optparse import OptionParser
-from priv.holgi.mediacopy.utils import logger, unicodify, make_dsn
-from priv.holgi.mediacopy.infostore import make_infostore
-from priv.holgi.mediacopy.applogic import store_metainfo_directory
-from priv.holgi.mediacopy.filelib import validate_destination
+from hs.mediacopy.utils import logger, unicodify, make_dsn
+from hs.mediacopy.infostore import make_infostore
+from hs.mediacopy.applogic import store_metainfo_directory
+from hs.mediacopy.filelib import validate_destination
 
 _default_encoding=sys.getfilesystemencoding() or 'utf-8'
 

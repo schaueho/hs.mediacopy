@@ -20,9 +20,9 @@
 
 import copy 
 from nose.tools import raises, eq_, istest
-from priv.holgi.mediacopy.tests.mediacp_base_test import MediacpTestBase
-from priv.holgi.mediacopy.metainfo import ImageMetaInfo
-from priv.holgi.mediacopy.piccp import parse_exif, \
+from hs.mediacopy.tests.mediacp_base_test import MediacpTestBase
+from hs.mediacopy.metainfo import ImageMetaInfo
+from hs.mediacopy.piccp import parse_exif, \
     imagemetainfo_from_file, EXIFTAGS
 
 class Exif_Test(MediacpTestBase):

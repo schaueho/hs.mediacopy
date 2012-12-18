@@ -21,9 +21,9 @@
 import copy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
-from priv.holgi.mediacopy import dbmodel
-from priv.holgi.mediacopy.utils import logger
-from priv.holgi.mediacopy.types import modelclass_for_mi, \
+from hs.mediacopy import dbmodel
+from hs.mediacopy.utils import logger
+from hs.mediacopy.types import modelclass_for_mi, \
     miclass_for_model, get_metainfo
 
 class InfoStore(object):
