@@ -64,7 +64,7 @@ def mediacopy_file(filename, destination, store, options, result):
 def copy_and_store(filename, destination, store, options, duplicate=False):
     ''' Copy file to destination and store metainfo
     If duplicate is True, copy only if options.force is also True.
-    If options.noaction is True, don't really copy or store.'''
+    If options.noaction is True, do not really copy or store.'''
 
     result = True
     if options.noaction:
