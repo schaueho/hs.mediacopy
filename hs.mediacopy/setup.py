@@ -24,6 +24,7 @@ setup(name='hs.mediacopy',
       namespace_packages=['hs'],
       include_package_data=True,
       zip_safe=True,
+      setup_requires=['wheel'],
       install_requires=[
           'setuptools',
           # -*- Extra requirements: -*-
