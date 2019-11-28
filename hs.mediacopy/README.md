@@ -14,6 +14,7 @@ already existing files at some destination.
 
 mediacp.py has the following synopsis:
 
+```
 Usage: mediacp.py [options] sourcedir destinationdir
 
 Options:
@@ -24,10 +25,12 @@ Options:
   -n, --noaction        don't perform the action
   -u, --unknown         copy unknown filetypes as well
   -v, --verbose         verbose logging
+```
 
 As you can see, mediacp.py expects a source directory which it will
 recurse into and a destination directory to copy the media files to.
 
+```
 mediascan.py has the following synopsis:
 
 Usage: mediascan.py [options] sourcedir
@@ -38,27 +41,15 @@ Options:
                         location (path without filename) of database
   -n, --nowrite   don't write database
   -v, --verbose   verbose logging
+```
 
 mediascan will scan the mediafiles in sourcedir and record metadata
 abouth them into a database with the name mediacp.db in sourcedir.
 
 Installation
 ============
-TODO: Rewrite!
 
-mediacopy comes as a python package ("egg"), which means that it is
-intended to be installed via easy_install, cf. 
-http://peak.telecommunity.com/DevCenter/EasyInstall
-
-However, as of today, mediacopy is not distributed via
-pypi.python.org.
-
-TODO: Installation description
-
-This will /not/ download all required packages. In particular, it will
-not download/install EXIF.py, which is available as a separate
-download from http://sourceforge.net/projects/exif-py/ (it's neither
-available as an egg nor as a source distribution of a python package
-unfortunately). You must install EXIF.py into a place where your
-python-installation can find it.
+mediacopy comes as a python package, which means that it is intended
+to be installed via easy_install or pip. However, as of today,
+mediacopy is not distributed via pypi.python.org.
 
