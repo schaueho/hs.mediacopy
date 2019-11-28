@@ -31,7 +31,7 @@ class InfoStore(object):
     It abstracts away the database by providing a fassade to
     lower level dbstuff.
     '''
-    
+
     def __init__(self, dsn, metadata, **enginekeys):
         self._engine = create_engine(dsn, **enginekeys)
         self._metadata = metadata
@@ -41,7 +41,7 @@ class InfoStore(object):
                               autocommit=True,
                               autoflush=True)
         self._getSession = scoped_session(smaker)
-        
+
     @property
     def _session(self):
         return self._getSession()
@@ -57,8 +57,8 @@ class InfoStore(object):
 
     def _translate_metainfo_to_metainfomodel(self, metainfo):
         ''' Make a new MetaInfoModel object from metainfo '''
-    
-        keys = metainfo.keys()
+
+        keys = list(metainfo.keys())
         discriminator = self._get_discriminator(metainfo)
         mimodel = modelclass_for_mi(metainfo)()
         allkeys = ['name','abspath'] + keys
@@ -67,9 +67,9 @@ class InfoStore(object):
             setattr(mimodel, key, getattr(metainfo, key))
         mimodel.discriminator = discriminator
         return mimodel
-        
+
     def _get_discriminator(self, metainfo):
-        ''' Returns a discriminator from the class name of metainfo 
+        ''' Returns a discriminator from the class name of metainfo
         Assumes that the classname of metainfo has a specific suffix.'''
         suffix = 'metainfo'
         klassname = copy.copy(metainfo.__class__.__name__).lower()
@@ -77,9 +77,9 @@ class InfoStore(object):
             return klassname[:-len(suffix)]
         else:
             raise ValueError("Can't determine discriminator from %s" % metainfo)
-        
+
     def get_all_metainfos(self, **criteria):
-        ''' Return all metainfo objects from the store matching 
+        ''' Return all metainfo objects from the store matching
         the criteria key=value. Key needs to be of type string. '''
         result = []
         dbresult = self._session.query(dbmodel.MetaInfoModel).filter_by(**criteria).all()
@@ -89,10 +89,10 @@ class InfoStore(object):
 
     def _translate_metainfomodel_to_metainfo(self, model):
         ''' Make a new MetaInfo object from model '''
-    
+
         ignored = ['id','name','abspath', '_sa_class_manager', 'discriminator']
         modelklass = model.__class__
-        attribs = [key for key in modelklass.__dict__.keys() \
+        attribs = [key for key in list(modelklass.__dict__.keys()) \
                        if (not(key in ignored) and \
                                not(key.startswith('__')))]
         metainfo = miclass_for_model(model)(model.name, model.abspath)
@@ -120,5 +120,3 @@ def make_infostore(dsn):
     metadata = dbmodel.Base.metadata
     infostore = InfoStore(dsn, metadata)
     return infostore
-
-

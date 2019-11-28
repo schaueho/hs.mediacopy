@@ -28,11 +28,10 @@ from hs.mediacopy.tests.mediacp_base_test import MediacpTestBase
 
 class OptionsStub(object):
     def __init__(self, **kw):
-        for key, value in kw.items():
+        for key, value in list(kw.items()):
             setattr(self, key, value)
-        
+
 class Applogic_Test(MediacpTestBase):
-    
     def setUp(self):
         self.infostore = make_infostore('sqlite://')
         self.sourcedir = os.path.dirname(__file__)
@@ -44,7 +43,7 @@ class Applogic_Test(MediacpTestBase):
         self._teardown_testpic()
         self._teardown_testdir()
         super(Applogic_Test, self).tearDown()
-        
+
     @istest
     def storedir_adds_new_metainfo(self):
         options = OptionsStub(encoding='utf-8', verbose=False)
@@ -73,4 +72,3 @@ class Applogic_Test(MediacpTestBase):
         eq_(copied, 1)
         eq_(dupes, 0)
         eq_(len(self.infostore.get_all_metainfos()), 1)
-        

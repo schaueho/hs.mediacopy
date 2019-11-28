@@ -26,7 +26,6 @@ from hs.mediacopy.piccp import ImageMetaInfo, imagemetainfo_from_file
 from hs.mediacopy.dbmodel import ImageMetaInfoModel
 
 class InfoStore_Test(DbModel_Test, MediacpTestBase):
-    
     def setUp(self):
         self.infostore = make_infostore(self.testdsn)
         self._make_fixture(self.infostore._engine)
@@ -40,22 +39,22 @@ class InfoStore_Test(DbModel_Test, MediacpTestBase):
     @istest
     def get_discriminator_for_ImageMetaInfo(self):
         imi = imagemetainfo_from_file(self.testfile)
-        eq_(self.infostore._get_discriminator(imi), u'image')
+        eq_(self.infostore._get_discriminator(imi), 'image')
 
     @istest
     def put_metainfo_creates_object_in_db(self):
         imi = imagemetainfo_from_file(self.testfile)
-        name = u'new'+imi.name.lower()
+        name = 'new'+imi.name.lower()
         imi.name = name
         self.infostore.put_metainfo(imi)
         result = self.infostore.get_all_metainfos(name=name)
         eq_(len(result), 1)
         eq_(result[0].name, name)
-        eq_(result[0].exif_datetimeoriginal, 
+        eq_(result[0].exif_datetimeoriginal,
             str(imi.exif_datetimeoriginal))
-        eq_(result[0].image_make, 
+        eq_(result[0].image_make,
             str(imi.image_make))
-        eq_(result[0].image_model, 
+        eq_(result[0].image_model,
             str(imi.image_model))
 
     @istest
@@ -66,15 +65,15 @@ class InfoStore_Test(DbModel_Test, MediacpTestBase):
     @istest
     def get_all_metainfos_finds_imagemetainfomodeldata_from_fixture(self):
         imi = self.data.ImageMetaInfoModel_Data.cimg2555
-        result = self.infostore.get_all_metainfos(discriminator=u'image', 
+        result = self.infostore.get_all_metainfos(discriminator='image',
                                                   name=imi.name)
         eq_(len(result), 1)
         eq_(isinstance(result[0], ImageMetaInfo), True)
-        eq_(result[0].exif_datetimeoriginal, 
+        eq_(result[0].exif_datetimeoriginal,
             str(self.data.ImageMetaInfoModel_Data.cimg2555.exif_datetimeoriginal))
-        eq_(result[0].image_make, 
+        eq_(result[0].image_make,
             str(imi.image_make))
-        eq_(result[0].image_model, 
+        eq_(result[0].image_model,
             str(imi.image_model))
 
     @istest
@@ -82,4 +81,3 @@ class InfoStore_Test(DbModel_Test, MediacpTestBase):
         imi = imagemetainfo_from_file(self.testfile)
         self.infostore.put_metainfo(imi)
         eq_(isinstance(self.infostore.find_similar(imi), ImageMetaInfo), True)
-        

@@ -1,5 +1,5 @@
 '''
-    types.py -- functions to identify and dispatch on media type 
+    types.py -- functions to identify and dispatch on media type
     This file is part of mediacopy.
 
     Copyright (C) 2010 Holger Schauer <holger.schauer@gmx.de>

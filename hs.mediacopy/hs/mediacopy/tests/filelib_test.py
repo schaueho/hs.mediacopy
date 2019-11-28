@@ -42,7 +42,7 @@ class ValidateDestination_Test(MediacpTestBase):
         (handler, tempfile) = mkstemp("", "mct", self.destdir)
         try:
             validate_destination(tempfile)
-        except IOError, e:
+        except IOError as e:
             remove(tempfile)
             self._teardown_testdir()
             raise e
@@ -58,7 +58,7 @@ class ValidateDestination_Test(MediacpTestBase):
         chmod(self.destdir, stat(self.destdir).st_mode ^ S_IWUSR ^ S_IXUSR)
         try:
             validate_destination(self.destdir)
-        except IOError, e:
+        except IOError as e:
             chmod(self.destdir, S_IWUSR & S_IXUSR)
             self._teardown_testdir()
             raise e
@@ -156,13 +156,13 @@ class SimilarFile_Test(MediacpTestBase):
         self._teardown_testdir()
     
     def case_doesnt_matter_test(self):
-        eq_(similar_filenames(u'CIMG2448.JPG', u'cimg2448.jpg'), True)
+        eq_(similar_filenames('CIMG2448.JPG', 'cimg2448.jpg'), True)
 
     def similar_extensions_test(self):
-        eq_(similar_filenames(u'CIMG2448.JPG', u'CIMG2448.JPEG'), True)
+        eq_(similar_filenames('CIMG2448.JPG', 'CIMG2448.JPEG'), True)
 
     def case_and_similar_extensions_test(self):
-        eq_(similar_filenames(u'CIMG2448.JPG', u'cimg2448.jpeg'), True)
+        eq_(similar_filenames('CIMG2448.JPG', 'cimg2448.jpeg'), True)
 
     @istest
     def find_similar_filenames_finds_matches_in_directories(self):
@@ -171,7 +171,7 @@ class SimilarFile_Test(MediacpTestBase):
         try:
             eq_(find_similar_filenames(self.destdir, self.testfilename), 
                 [path.join(self.destdir, self.testfilename)])
-        except AssertionError, e:
+        except AssertionError as e:
             self._teardown_manually()
             raise e
         else:
