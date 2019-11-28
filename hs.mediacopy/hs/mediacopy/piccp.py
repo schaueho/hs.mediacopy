@@ -39,7 +39,7 @@ def imagemetainfo_from_file(filename):
             mkey = mkey.replace(' ','_')
             mvalue = original_exiftags.get(key, None)
             if mvalue:
-                exiftags[mkey] = unicode(mvalue)
+                exiftags[mkey] = str(mvalue)
             else:
                 exiftags[mkey] = mvalue
     basename = os.path.basename(filename).lower()
@@ -54,4 +54,3 @@ def parse_exif(filename):
     except:
         fhandle.close()
     return tags
-

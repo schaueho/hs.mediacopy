@@ -34,13 +34,13 @@ def show_summary_of_current_mis(infostore, options):
     if options.verbose:
         for mi in current_mis:
             logger.info("Looking at: %s" % mi.name)
-    print "Stored metainfo items: %s" % len(current_mis)
+    print("Stored metainfo items: %s" % len(current_mis))
 
 def parse_options():
     usage = "usage: %prog [options] sourcedir"
     parser = OptionParser(usage=usage)
-    parser.add_option('-D', '--database', dest="database", 
-                      type="string", 
+    parser.add_option('-D', '--database', dest="database",
+                      type="string",
                       help="location (path without filename) of database")
     parser.add_option('-e', "--encoding", dest="encoding",
                       type="string", help="file name encoding",
@@ -53,12 +53,12 @@ def parse_options():
     if len(args) != 1:
         parser.error("incorrect number of arguments")
     return [parser, options, args]
- 
+
 def main():
     parser, options, args = parse_options()
     try:
         validate_destination(args[0])
-    except IOError, e:
+    except IOError as e:
         parser.print_help()
         raise e
 

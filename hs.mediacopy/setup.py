@@ -1,12 +1,12 @@
 from setuptools import setup, find_packages
 import os
 
-version = '0.1'
+version = '0.2'
 
 setup(name='hs.mediacopy',
       version=version,
       description="copy media files, avoiding duplicates",
-      long_description=open("README.txt").read() + "\n" +
+      long_description=open("README.md").read() + "\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
       # Get more strings from
       # http://pypi.python.org/pypi?%3Aaction=list_classifiers
@@ -19,7 +19,6 @@ setup(name='hs.mediacopy',
       keywords='pictures copy exif',
       author='Holger Schauer',
       author_email='holger.schauer@gmx.de',
-      url='http://bitbucket.org/schaueho/mediacopy',
       license='GPL',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['hs'],
@@ -28,8 +27,8 @@ setup(name='hs.mediacopy',
       install_requires=[
           'setuptools',
           # -*- Extra requirements: -*-
+          'exifread',
           'python-magic',
-          'pysqlite',
           'sqlalchemy',
       ],
       dependency_links = [

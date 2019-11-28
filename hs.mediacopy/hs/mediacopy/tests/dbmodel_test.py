@@ -33,8 +33,8 @@ logging.getLogger('sqlalchemy.engine').setLevel(logging.DEBUG)
 class DbModel_Test(DataTestCase):
 
     # setup a testdb -- we use a sqlite db in memory
-    testdsn = u'sqlite://'
-    
+    testdsn = 'sqlite://'
+
     def setUp(self):
         self._make_dbconn()
         self._make_fixture(self.engine)
@@ -74,4 +74,3 @@ class DbModel_Test(DataTestCase):
         assert (result.name and result.abspath and \
                 result.exif_datetimeoriginal and \
                 result.image_model and result.image_make)
-    

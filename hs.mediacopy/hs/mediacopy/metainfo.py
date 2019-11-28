@@ -29,7 +29,7 @@ class MetaInfo(object):
         self.name = name
         self.abspath = abspath
         self.setInfo(**kw)
-        
+
     def setInfo(self, **info):
         """Set parameters of the MetaInfo.
 
@@ -39,7 +39,7 @@ class MetaInfo(object):
             oldinfo = self._infodata
             self._infodata=info
             # ensure we have all our infodata available as instance attributes
-            for key, value in info.items():
+            for key, value in list(info.items()):
                 setattr(self, key, value)
             # delete old infodata
             for key in oldinfo:
@@ -48,11 +48,11 @@ class MetaInfo(object):
 
     def keys(self):
         ''' Return the info attributes '''
-        return self._infodata.keys()
+        return list(self._infodata.keys())
 
     def values(self):
         ''' Return the values of the info attributes '''
-        return self._infodata.values()
+        return list(self._infodata.values())
 
     def __str__(self):
         return "%s:%s#%s" % (self.name, self.abspath, self._infodata)
@@ -62,8 +62,8 @@ class MetaInfo(object):
         We check the name as well as the exif information for now.
         '''
         if (self.name == other.name):
-            selftags = self.keys()
-            othertags = other.keys()
+            selftags = list(self.keys())
+            othertags = list(other.keys())
             selftags.sort()
             othertags.sort()
             if not(selftags == othertags):
@@ -82,11 +82,10 @@ class MetaInfo(object):
             return False
 
 class ImageMetaInfo(MetaInfo):
-    
+
     def __init__(self, name, abspath, **kw):
         super(ImageMetaInfo, self).__init__(name, abspath, **kw)
         try:
             self.setInfo(**kw['exiftags'])
         except KeyError:
             pass
-

@@ -30,7 +30,7 @@ _EXTENSION_TABLE = {
     }
 
 
-def copy_newfile(filename, destination, copyunknown=False, 
+def copy_newfile(filename, destination, copyunknown=False,
                  overwrite=False, noaction=False):
     ''' Copy file to destination only if we think it is new
     Returns True on successful copying
@@ -48,7 +48,7 @@ def copy_newfile(filename, destination, copyunknown=False,
         return copy_file(filename, destination, overwrite, noaction, copyunknown)
 
 def copy_file(filename, destination, overwrite=False, noaction=False, copyunknown=False):
-    ''' Copy file to destination 
+    ''' Copy file to destination
     Returns True on successful copying.
     '''
     basename = os.path.basename(filename)
@@ -61,7 +61,7 @@ def copy_file(filename, destination, overwrite=False, noaction=False, copyunknow
         return False
     else:
         if noaction:
-            print "Copy %s to %s" % (filename, destination)
+            print("Copy %s to %s" % (filename, destination))
         else:
             shutil.copy2(filename, destination)
         return True
@@ -71,7 +71,7 @@ def find_similar_filenames(destination, filename):
     '''
     match = []
     existing_targets = get_existing_targets(destination)
-    for existing_file in existing_targets.keys():
+    for existing_file in list(existing_targets.keys()):
         if similar_filenames(filename, existing_file):
             match.append(existing_targets[existing_file])
             break
@@ -81,14 +81,14 @@ def get_existing_targets(destination):
     ''' Find all existing targets in destination '''
     result = {}
     def collect_filename(filename):
-        ''' Simple helper to collect filenames into result ''' 
+        ''' Simple helper to collect filenames into result '''
         result[os.path.basename(filename)]=filename
 
     walktree(destination, lambda f: collect_filename(f))
     return result
 
 def similar_filenames(filename1, filename2):
-    ''' Check whether two file names are similar 
+    ''' Check whether two file names are similar
     '''
     cname1 = reduce_filename(filename1)
     cname2 = reduce_filename(filename2)
@@ -116,10 +116,10 @@ def reduce_fileext(filename):
 def target_exists(destination, filename):
     ''' Determine whether filename exists at destination '''
     return os.path.exists(os.path.join(destination, filename))
-  
+
 def validate_destination(dest):
     ''' Validate that the destination exists and is writable. '''
-    if not(os.path.exists(dest) and os.path.isdir(dest) and 
+    if not(os.path.exists(dest) and os.path.isdir(dest) and
            os.access(dest, os.W_OK | os.X_OK)):
         raise IOError("Destination %s doesn't exist or isn't writable" % dest)
     return True
@@ -151,9 +151,9 @@ def walktree(top, callback, acc=__unspecified__):
                 callback(pathname)
         else:
             # Unknown file type, print a message
-            print 'Skipping %s' % pathname
+            print('Skipping %s' % pathname)
     return accvalue
 
 def print_filename(filename):
     ''' Just print out the name of the file we would visit '''
-    print 'visiting: %s' % filename
+    print('visiting: %s' % filename)

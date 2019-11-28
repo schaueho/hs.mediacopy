@@ -26,7 +26,6 @@ from hs.mediacopy.utils import make_dsn
 from hs.mediacopy.infostore import make_infostore
 from hs.mediacopy.applogic import mediacopy_directory
 from hs.mediacopy.filelib import validate_destination
-    
 
 _destination = os.path.join(os.getenv("HOME"), "Bilder", "Fotos")
 _default_encoding=sys.getfilesystemencoding() or 'utf-8'
@@ -34,8 +33,8 @@ _default_encoding=sys.getfilesystemencoding() or 'utf-8'
 def parse_options():
     usage = "usage: %prog [options] sourcedir destinationdir"
     parser = OptionParser(usage=usage)
-    parser.add_option('-D', '--database', dest="database", 
-                      type="string", default=_destination, 
+    parser.add_option('-D', '--database', dest="database",
+                      type="string", default=_destination,
                       help="(location of) destination database holding metadata")
     parser.add_option('-e', "--encoding", dest="encoding",
                       type="string", default=_default_encoding,
@@ -44,7 +43,7 @@ def parse_options():
                       help="force overwrite")
     parser.add_option('-n', '--noaction', dest="noaction", action="store_true",
                       help="don't perform the action")
-    parser.add_option('-u', '--unknown', dest="copyunknown", 
+    parser.add_option('-u', '--unknown', dest="copyunknown",
                       action="store_true",
                       help="copy unknown filetypes as well")
     parser.add_option('-v', '--verbose', dest="verbose", action="store_true",
@@ -58,7 +57,7 @@ def main():
     parser, options, args = parse_options()
     try:
         validate_destination(args[1])
-    except IOError, e:
+    except IOError as e:
         parser.print_help()
         raise e
 
@@ -66,8 +65,7 @@ def main():
     dsn = make_dsn(options.database or args[1])
     infostore = make_infostore(dsn)
     (seen, copied, dupes) = mediacopy_directory(args[0], args[1], infostore, options, result)
-    print "Saw %s files, copied %s files and ignored %s duplicates" % (seen, copied, dupes)
+    print("Saw %s files, copied %s files and ignored %s duplicates" % (seen, copied, dupes))
 
 if __name__ == "__main__":
     main()
-

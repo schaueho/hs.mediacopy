@@ -21,14 +21,12 @@
 import os
 from fixture import DataSet
 
-testpath = os.path.dirname(__file__) 
+testpath = os.path.dirname(__file__)
 
 class ImageMetaInfoModel_Data(DataSet):
     class cimg2555:
-        name = u'cimg2555.jpg'
-        abspath = unicode(os.path.join(testpath, u'CIMG2555.JPG'))
-        exif_datetimeoriginal = u'2010:03:16 14:21:25'
-        image_model = u'EX-P700'
-        image_make = u'CASIO COMPUTER CO.,LTD '
-
-
+        name = 'cimg2555.jpg'
+        abspath = str(os.path.join(testpath, 'CIMG2555.JPG'))
+        exif_datetimeoriginal = '2010:03:16 14:21:25'
+        image_model = 'EX-P700'
+        image_make = 'CASIO COMPUTER CO.,LTD '
